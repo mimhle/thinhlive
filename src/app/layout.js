@@ -7,8 +7,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en" data-theme="forest">
-            <body>
+        <html lang="en" data-theme="customForest">
+            <body className="bg-neutral">
                 {children}
             </body>
         </html>

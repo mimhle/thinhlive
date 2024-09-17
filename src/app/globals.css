@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --rounded-box: 0.5rem;
+    --rounded-btn: 0.5rem;
+}

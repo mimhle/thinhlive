@@ -20,9 +20,11 @@ export default function Page() {
         }
         signUp(username, password).then(res => {
             if (res.status === "success") {
-                window.location.href = "/signin";
+                window.location.href = "/";
+            } else {
+                finish();
             }
-            finish();
+
         });
     };
 

@@ -17,8 +17,10 @@ export default function Page() {
         signIn(username, password).then(res => {
             if (res.status === "success") {
                 router.push("/");
+            } else {
+                finish();
             }
-            finish();
+
         });
     };
 

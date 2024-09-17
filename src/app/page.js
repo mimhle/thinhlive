@@ -8,11 +8,10 @@ import Button from "@/app/Button";
 export default function Home() {
     const [username, setUsername] = useState("");
 
-    const logout = (_, load, finish) => {
+    const logout = (_, load) => {
         load();
         logOut().then(res => {
             if (res.status === "success") {
-                finish();
                 window.location.reload();
             }
         });

@@ -1,19 +1,13 @@
 "use server";
 
 import { NextResponse } from "next/server";
-import clientPromise from "/lib/mongodb";
+import { createUser } from "/lib/auth";
 
-export async function GET(request) {
-    try {
-        const client = await clientPromise;
-        const db = client.db("main");
-        const movies = await db
-            .collection("users")
-            .find({})
-            .toArray();
-        return NextResponse.json(movies);
-    } catch (e) {
-        console.error(e);
-        return NextResponse.error();
+export async function POST(request) {
+    const body = await request.json();
+    const { username, password } = body;
+    if (await createUser(username, password)) {
+        return NextResponse.json({ status: "success", message: "Account created" });
     }
+    return NextResponse.json({ status: "failed", message: "Failed to create account" });
 }

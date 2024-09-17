@@ -3,20 +3,26 @@
 import Link from "next/link";
 import { useState } from "react";
 import { signUp } from "/lib/api";
+import Button from "@/app/Button";
 
 export default function Page() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const submit = (e) => {
+    const submit = (e, load, finish) => {
         e.preventDefault();
+        load();
         if (password !== confirmPassword) {
             alert("Passwords do not match");
+            finish();
             return;
         }
         signUp(username, password).then(res => {
-            console.log(res);
+            if (res.status === "success") {
+                window.location.href = "/signin";
+            }
+            finish();
         });
     };
 
@@ -28,7 +34,7 @@ export default function Page() {
                 <input placeholder="Username" className="input input-bordered" value={username} onChange={e => setUsername(e.target.value)}/>
                 <input placeholder="Password" type="password" className="input input-bordered" value={password} onChange={e => setPassword(e.target.value)}/>
                 <input placeholder="Confirm password" type="password" className="input input-bordered" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
-                <button className="btn btn-primary" onClick={submit}>Create account</button>
+                <Button className="btn btn-primary" onClick={submit}>Create account</Button>
                 <div className="flex flex-row justify-end">
                     <Link className="link" href={"/signin"}>Already have an account?</Link>
                 </div>

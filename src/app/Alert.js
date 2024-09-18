@@ -50,10 +50,8 @@ export default function useAlert() {
         const _id = randomString(10);
         if (alerts.length >= maxAlerts) {
             onClose(alerts[alerts.length - 1]._id)
-            setAlerts(prev => [{ ...config, _id: _id }, ...prev]);
-        } else {
-            setAlerts(prev => [{ ...config, _id: _id }, ...prev]);
         }
+        setAlerts(prev => [{ ...config, _id: _id }, ...prev]);
 
         setTimeout(() => {
             onClose(_id)

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { signUp } from "/lib/api";
 import Button from "@/app/Button";
+import Password from "../Password";
 
 export default function Page() {
     const [username, setUsername] = useState("");
@@ -34,8 +35,8 @@ export default function Page() {
             <div className="card-body">
                 <h1 className="text-2xl font-bold">Sign up</h1>
                 <input placeholder="Username" className="input input-bordered" value={username} onChange={e => setUsername(e.target.value)}/>
-                <input placeholder="Password" type="password" className="input input-bordered" value={password} onChange={e => setPassword(e.target.value)}/>
-                <input placeholder="Confirm password" type="password" className="input input-bordered" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
+                <Password placeholder="Password" type="password" className="input input-bordered" value={password} onChange={e => setPassword(e.target.value)}/>
+                <Password placeholder="Confirm password" type="password" className="input input-bordered" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
                 <Button className="btn btn-primary" onClick={submit}>Create account</Button>
                 <div className="flex flex-row justify-end">
                     <Link className="link" href={"/signin"}>Already have an account?</Link>

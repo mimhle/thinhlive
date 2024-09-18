@@ -3,21 +3,22 @@
 import Link from "next/link";
 import { signIn } from "/lib/api";
 import { useState } from "react";
-import { useRouter } from 'next/navigation'
 import Button from "@/app/Button";
+import useAlert from "@/app/Alert";
 import Password from "../Password";
+import { choose } from "/lib/utils";
 
 export default function Page() {
+    const { contextHolder, alert } = useAlert();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const router = useRouter();
 
     const submit = (e, load, finish) => {
         e.preventDefault();
         load();
         signIn(username, password).then(res => {
             if (res.status === "success") {
-                router.push("/");
+                window.location.href = "/";
             } else {
                 finish();
             }
@@ -27,6 +28,7 @@ export default function Page() {
 
 
     return <div className="h-full flex flex-col justify-center min-h-screen">
+        {contextHolder}
         <div className="card bg-base-200 w-1/3 m-auto">
             <div className="card-body">
                 <h1 className="text-2xl font-bold">Sign in to continue</h1>
@@ -39,6 +41,9 @@ export default function Page() {
                 </div>
                 <div className="divider">OR</div>
                 <button className="btn btn-ghost">Continue as guest</button>
+                <Button className="btn btn-primary" onClick={() => {
+                    alert({children: `test${Math.random()}`, type: choose(["info", "warning", "error", "success"])});
+                }}>test</Button>
             </div>
         </div>
     </div>;

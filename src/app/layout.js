@@ -2,6 +2,7 @@ import "./globals.css";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifySession } from "/lib/auth";
+import Nav from "@/app/Nav";
 
 export const metadata = {
     title: "Create Next App",
@@ -19,7 +20,8 @@ export default async function RootLayout({ children }) {
 
     return (
         <html lang="en" data-theme="customForest">
-            <body className="bg-neutral">
+            <body className="bg-neutral overflow-x-hidden">
+                <Nav user={cookieStore.get("username")?.value}/>
                 {children}
             </body>
         </html>

@@ -4,8 +4,17 @@ import { getCookieValue } from "/lib/utils";
 import { useEffect, useState } from "react";
 import { logOut } from "/lib/api";
 import Button from "@/app/Button";
+import Carousel from "@/app/(main)/Carousel";
 
 export default function Home() {
+    const [bannerImages, setBannerImages] = useState([
+        "/banner1.png",
+        "/banner2.png",
+        "/banner3.png",
+        "/banner4.png",
+        "/banner5.png",
+    ]);
+
     const [username, setUsername] = useState("");
 
     const logout = (_, load) => {
@@ -15,18 +24,18 @@ export default function Home() {
                 window.location.reload();
             }
         });
-    }
+    };
 
     useEffect(() => {
         setUsername(getCookieValue("username"));
     }, []);
 
     return (
-        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            test: {username}
-            <div>
-                <Button className="btn btn-error" onClick={logout}>Log out</Button>
+        <div className="flex flex-col min-h-screen w-screen gap-16 pb-20">
+            <div className="bg-base-200 w-full">
+                <Carousel images={bannerImages} />
             </div>
+            test: {username}
         </div>
     );
 }

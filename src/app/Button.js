@@ -16,7 +16,7 @@ export default function Button({ className, onClick, children, ...rest }) {
     const error = () => {};
 
     const handleClick = (e) => {
-        onClick(e, load, finish, error);
+        onClick?.(e, load, finish, error);
     };
 
     return <button className={`${className} ${loading ? "!pointer-events-none" : ""}`} onClick={handleClick} {...rest}>

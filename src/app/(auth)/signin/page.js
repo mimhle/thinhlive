@@ -5,7 +5,7 @@ import { signIn } from "/lib/api";
 import { useState } from "react";
 import Button from "@/app/Button";
 import useAlert from "@/app/Alert";
-import Password from "../../Password";
+import Password from "@/app/Password";
 import { choose } from "/lib/utils";
 
 export default function Page() {

@@ -1,7 +1,7 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { verifySession } from "/lib/auth";
-import Nav from "@/app/Nav";
+import Nav from "@/app/(main)/Nav";
 
 export default async function MainNav({ children }) {
     const cookieStore = cookies();
@@ -15,7 +15,7 @@ export default async function MainNav({ children }) {
     return (
         <html lang="en" data-theme="customForest">
             <body className="bg-neutral overflow-x-hidden flex flex-row">
-                <Nav user={cookieStore.get("username")?.value}/>
+                <Nav userName={cookieStore.get("username")?.value}/>
                 {children}
             </body>
         </html>

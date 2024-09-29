@@ -21,6 +21,10 @@ export default function Page() {
                 window.location.href = "/";
             } else {
                 finish();
+                alert({
+                    children: res.message,
+                    type: "error"
+                });
             }
 
         });

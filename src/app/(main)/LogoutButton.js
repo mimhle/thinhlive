@@ -4,7 +4,7 @@ import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import Button from "@/app/Button";
 import { logOut } from "/lib/api";
 
-export default function LogoutButton({ className, onClick }) {
+export default function LogoutButton({ className }) {
     const logout = (_, load) => {
         load();
         logOut().then(res => {
@@ -14,7 +14,7 @@ export default function LogoutButton({ className, onClick }) {
         });
     };
 
-    return <Button className="btn" onClick={logout}>
+    return <Button className="btn bg-base-100" onClick={logout}>
         <ArrowLeftStartOnRectangleIcon className="size-8" />
     </Button>;
 }

@@ -3,8 +3,8 @@
 import { getCookieValue } from "/lib/utils";
 import { useEffect, useState } from "react";
 import { logOut } from "/lib/api";
-import Button from "@/app/Button";
 import Carousel from "@/app/(main)/Carousel";
+import Gallery from "@/app/(main)/Gallery";
 
 export default function Home() {
     const [bannerImages, setBannerImages] = useState([
@@ -13,6 +13,17 @@ export default function Home() {
         "/banner3.png",
         "/banner4.png",
         "/banner5.png",
+    ]);
+
+    const [recommendations, setRecommendations] = useState([
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
     ]);
 
     const [username, setUsername] = useState("");
@@ -31,10 +42,11 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="flex flex-col min-h-screen w-screen gap-16 pb-20">
+        <div className="flex flex-col h-screen w-screen gap-4 pb-20 overflow-x-scroll">
             <div className="bg-base-200 w-full">
-                <Carousel images={bannerImages} />
+                <Carousel images={bannerImages}/>
             </div>
+            <Gallery items={[...recommendations, ...recommendations, ...recommendations, ...recommendations]}/>
             test: {username}
         </div>
     );

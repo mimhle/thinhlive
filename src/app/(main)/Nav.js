@@ -1,7 +1,8 @@
 import LogoutButton from "./LogoutButton";
+import { CogIcon, HomeIcon, UserIcon } from "@heroicons/react/24/outline";
 
 export default function Nav({ userName }) {
-    return <div className="bg-base-200 p-2 flex flex-col gap-4 justify-between ~/md:~w-12/20">
+    return <div className="bg-base-100 p-2 flex flex-col gap-4 justify-between ~/md:~w-12/20 max-h-screen">
         <div className="flex flex-col gap-4">
             <div className="avatar placeholder">
                 <div
@@ -18,9 +19,15 @@ export default function Nav({ userName }) {
         </div>
         <div>
             <div className="flex flex-col gap-4">
-                <a className="btn btn-primary" href="/public">Home</a>
-                <a className="btn btn-primary" href="/signin">Sign in</a>
-                <a className="btn btn-primary" href="/signup">Sign up</a>
+                <a className="btn bg-base-100" href="/public">
+                    <HomeIcon className="size-8" />
+                </a>
+                <a className="btn bg-base-100" href="/">
+                    <UserIcon className="size-8" />
+                </a>
+                <a className="btn bg-base-100" href="/">
+                    <CogIcon className="size-8" />
+                </a>
             </div>
         </div>
         <div>

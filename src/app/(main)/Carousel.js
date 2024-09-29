@@ -44,7 +44,7 @@ export default function Carousel({ images }) {
         // }, 5000);
     }, []);
 
-    return <div className="w-full h-72 overflow-hidden">
+    return <div className="w-full ~h-44/72 overflow-hidden">
         <AnimatePresence>
             <motion.img
                 key={current}

@@ -19,13 +19,13 @@ export default function Nav({ userName }) {
         </div>
         <div>
             <div className="flex flex-col gap-4">
-                <a className="btn bg-base-100" href="/public">
+                <a className="btn bg-base-100 p-0" href="/public">
                     <HomeIcon className="size-8" />
                 </a>
-                <a className="btn bg-base-100" href="/">
+                <a className="btn bg-base-100 p-0" href="/">
                     <UserIcon className="size-8" />
                 </a>
-                <a className="btn bg-base-100" href="/">
+                <a className="btn bg-base-100 p-0" href="/">
                     <CogIcon className="size-8" />
                 </a>
             </div>

@@ -14,7 +14,7 @@ export default function LogoutButton({ className }) {
         });
     };
 
-    return <Button className="btn bg-base-100" onClick={logout}>
+    return <Button className="btn bg-base-100 p-0" onClick={logout}>
         <ArrowLeftStartOnRectangleIcon className="size-8" />
     </Button>;
 }

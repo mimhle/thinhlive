@@ -45,9 +45,6 @@ export default function Page() {
                 </div>
                 <div className="divider">OR</div>
                 <button className="btn btn-ghost">Continue as guest</button>
-                <Button className="btn btn-primary" onClick={() => {
-                    alert({children: `test${Math.random()}`, type: choose(["info", "warning", "error", "success"])});
-                }}>test</Button>
             </div>
         </div>
     </div>;

@@ -19,10 +19,10 @@ export default function Nav({ userName }) {
         </div>
         <div>
             <div className="flex flex-col gap-4">
-                <a className="btn bg-base-100 p-0" href="/public">
+                <a className="btn bg-base-100 p-0" href="/">
                     <HomeIcon className="size-8" />
                 </a>
-                <a className="btn bg-base-100 p-0" href="/">
+                <a className="btn bg-base-100 p-0" href="/profile">
                     <UserIcon className="size-8" />
                 </a>
                 <a className="btn bg-base-100 p-0" href="/">

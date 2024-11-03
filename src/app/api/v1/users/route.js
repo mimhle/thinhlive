@@ -1,7 +1,7 @@
 "use server";
 
 import { NextResponse } from "next/server";
-import { createUser, generateSession } from "/lib/auth";
+import { createUser, generateSession, getUser, verifySession } from "/lib/auth";
 
 export async function POST(request) {
     const body = await request.json();
@@ -15,3 +15,17 @@ export async function POST(request) {
     }
     return NextResponse.json({ status: "failed", message: "Failed to create account" });
 }
+
+export async function GET(request) {
+    const sessionId = request.cookies.get("session_id")?.value;
+    const username = request.cookies.get("username")?.value
+    
+    if (await verifySession(username, sessionId)) {
+        const user = await getUser(username);
+
+        const response = NextResponse.json({ status: "success", user: user });
+        return response;
+    }
+    return NextResponse.json({ status: "failed", message: "Authentication failed" });
+}
+

@@ -1,3 +1,4 @@
+import Avatar from "./Avatar";
 import LogoutButton from "./LogoutButton";
 import { CogIcon, HomeIcon, UserIcon } from "@heroicons/react/24/outline";
 
@@ -10,12 +11,7 @@ export default function Nav({ userName }) {
                     <span className="text-xl">LOGO</span>
                 </div>
             </div>
-            <div className="avatar placeholder">
-                <div
-                    className="bg-gradient-to-br from-primary to-secondary text-neutral-content w-full rounded-full">
-                    <span className="text-3xl">{userName?.toUpperCase().slice(0, 2)}</span>
-                </div>
-            </div>
+            <Avatar/>
         </div>
         <div>
             <div className="flex flex-col gap-4">
@@ -25,7 +21,7 @@ export default function Nav({ userName }) {
                 <a className="btn bg-base-100 p-0" href="/profile">
                     <UserIcon className="size-8" />
                 </a>
-                <a className="btn bg-base-100 p-0" href="/">
+                <a className="btn bg-base-100 p-0" href="/setting">
                     <CogIcon className="size-8" />
                 </a>
             </div>

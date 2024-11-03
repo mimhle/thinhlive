@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { signIn } from "/lib/api";
+import { signIn } from "/lib/frontend/api";
 import { useState } from "react";
 import Button from "@/app/Button";
 import useAlert from "@/app/Alert";
 import Password from "@/app/Password";
-import { choose } from "/lib/utils";
+import { choose } from "/lib/frontend/utils";
 
 export default function Page() {
     const { contextHolder, alert } = useAlert();

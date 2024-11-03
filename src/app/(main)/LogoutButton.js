@@ -2,7 +2,7 @@
 
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import Button from "@/app/Button";
-import { logOut } from "/lib/api";
+import { logOut } from "/lib/frontend/api";
 
 export default function LogoutButton({ className }) {
     const logout = (_, load) => {

@@ -1,6 +1,6 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { verifySession } from "/lib/auth";
+import { verifySession } from "/lib/backend/auth";
 import Nav from "@/app/(main)/Nav";
 
 export default async function MainNav({ children }) {

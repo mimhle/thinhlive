@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { signUp } from "/lib/api";
+import { signUp } from "/lib/frontend/api";
 import Button from "@/app/Button";
 import Password from "../../Password";
 import useAlert from "@/app/Alert";

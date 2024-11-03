@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getUserData } from "/lib/api";
+import { getUserData } from "/lib/frontend/api";
 
 export default function Avatar({ }) {
     const [data, setData] = useState(null);

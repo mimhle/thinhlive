@@ -1,8 +1,8 @@
 "use server";
 
 import { NextResponse } from "next/server";
-import { verifySession } from "/lib/auth";
-import { upload } from "/lib/media";
+import { verifySession } from "/lib/backend/auth";
+import { upload } from "/lib/backend/media";
 
 export async function POST(request) {
     const sessionId = request.cookies.get("session_id")?.value;

@@ -1,8 +1,8 @@
 "use client";
 
-import { getCookieValue } from "/lib/utils";
+import { getCookieValue } from "/lib/frontend/utils";
 import { useEffect, useState } from "react";
-import { logOut } from "/lib/api";
+import { logOut } from "/lib/frontend/api";
 import Carousel from "@/app/(main)/Carousel";
 import Gallery from "@/app/(main)/Gallery";
 
@@ -16,14 +16,7 @@ export default function Home() {
     ]);
 
     const [recommendations, setRecommendations] = useState([
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
+
     ]);
 
     const [username, setUsername] = useState("");

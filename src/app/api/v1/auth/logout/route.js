@@ -1,4 +1,4 @@
-import { deleteSession, verifySession } from "/lib/auth";
+import { deleteSession, verifySession } from "/lib/backend/auth";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {

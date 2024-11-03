@@ -1,4 +1,4 @@
-import { generateSession, verifyUser } from "/lib/auth";
+import { generateSession, verifyUser } from "/lib/backend/auth";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useIsPresent } from "framer-motion";
-import { randomString } from "/lib/utils";
+import { randomString } from "/lib/frontend/utils";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 
 function Alert({ children, type = "", onClose, className }) {

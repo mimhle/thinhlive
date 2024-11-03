@@ -1,8 +1,8 @@
 "use server";
 
 import { NextResponse } from "next/server";
-import { setUser } from "/lib/auth";
-import { verifySession } from "/lib/auth";
+import { setUser } from "/lib/backend/auth";
+import { verifySession } from "/lib/backend/auth";
 
 export async function PUT(request) {
     const sessionId = request.cookies.get("session_id")?.value;

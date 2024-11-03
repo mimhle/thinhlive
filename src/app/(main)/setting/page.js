@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { uploadMedia, setUserData, getUserData } from "/lib/api";
+import { uploadMedia, setUserData, getUserData } from "/lib/frontend/api";
 
 export default function Setting() {
     const [data, setData] = useState(null);

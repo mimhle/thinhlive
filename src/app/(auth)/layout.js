@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { verifySession } from "/lib/auth";
+import { verifySession } from "/lib/backend/auth";
 import { redirect } from "next/navigation";
 
 export default async function Nav({ children }) {

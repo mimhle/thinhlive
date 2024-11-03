@@ -1,7 +1,7 @@
 "use server";
 
 import { NextResponse } from "next/server";
-import { createUser, generateSession, getUser, verifySession } from "/lib/auth";
+import { createUser, generateSession, getUser, verifySession } from "/lib/backend/auth";
 
 export async function POST(request) {
     const body = await request.json();

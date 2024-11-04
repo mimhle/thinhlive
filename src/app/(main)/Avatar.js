@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import Image from "next/image";
-import { getUserData } from "/lib/frontend/api";
+import {getUserData} from "/lib/frontend/api";
 
-export default function Avatar() {
+export default function Avatar({src}) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -17,28 +17,41 @@ export default function Avatar() {
 
     if (!data) {
         return (
-            <div className="ring-primary ring-offset-base-100 bg-black/50 rounded-full ring ring-offset-2 overflow-hidden aspect-square flex items-center justify-center">
+            <div
+                className="ring-primary ring-offset-base-100 bg-black/50 rounded-full ring ring-offset-2 overflow-hidden aspect-square flex items-center justify-center">
                 <div className="avatar placeholder rounded-full skeleton opacity-5 bg-white w-full h-full"></div>
             </div>
         );
     }
 
     return (
-        <div className="relative ring-primary ring-offset-base-100 bg-black/50 rounded-full ring ring-offset-2 overflow-hidden aspect-square">
-            {data?.avatar ? (
+        <div
+            className="relative ring-primary ring-offset-base-100 bg-black/50 rounded-full ring ring-offset-2 overflow-hidden aspect-square">
+            {src ? (
                 <Image
-                    src={data.avatar}
+                    src={src}
                     alt="User avatar"
                     layout="fill"
                     objectFit="cover"
                     className="rounded-full"
                 />
             ) : (
-                <div className="avatar placeholder flex items-center justify-center w-full h-full">
-                    <div className="bg-gradient-to-br from-primary to-secondary text-neutral-content rounded-full flex items-center justify-center w-full h-full">
-                        <span className="text-4xl">{data.username.slice(0, 2).toUpperCase()}</span>
+                data?.avatar ? (
+                    <Image
+                        src={data.avatar}
+                        alt="User avatar"
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-full"
+                    />
+                ) : (
+                    <div className="avatar placeholder flex items-center justify-center w-full h-full">
+                        <div
+                            className="bg-gradient-to-br from-primary to-secondary text-neutral-content rounded-full flex items-center justify-center w-full h-full">
+                            <span className="text-4xl">{data.username.slice(0, 2).toUpperCase()}</span>
+                        </div>
                     </div>
-                </div>
+                )
             )}
         </div>
     );

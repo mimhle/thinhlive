@@ -9,6 +9,8 @@ export default function Setting() {
     const [data, setData] = useState(null);
     const [avatarFile, setAvatarFile] = useState(null);
     const [coverPhotoFile, setCoverPhotoFile] = useState(null);
+    const [avatarPreview, setAvatarPreview] = useState(null);
+    const [coverPhotoPreview, setCoverPhotoPreview] = useState(null);
 
 
     useEffect(() => {
@@ -18,6 +20,22 @@ export default function Setting() {
             }
         });
     }, []);
+
+    useEffect(() => {
+        if(avatarFile){
+            const previewUrl = URL.createObjectURL(avatarFile);
+            setAvatarPreview(previewUrl);
+            return () => URL.revokeObjectURL(previewUrl);
+        }
+    }, [avatarFile])
+
+    useEffect(() => {
+        if(coverPhotoFile){
+            const previewUrl = URL.createObjectURL(coverPhotoFile);
+            setCoverPhotoPreview(previewUrl);
+            return () => URL.revokeObjectURL(previewUrl);
+        }
+    }, [coverPhotoFile])
 
     if (!data) {
         return <div
@@ -65,7 +83,7 @@ export default function Setting() {
                 </div>
                 <div className="flex flex-row gap-8 items-center w-full h-fit">
                     <div className="w-48">
-                        <Avatar/>
+                        {avatarPreview ? <Avatar src={avatarPreview}/> : <Avatar/>}
                     </div>
                     <div className="flex flex-col gap-2">
                         <input
@@ -86,7 +104,7 @@ export default function Setting() {
                     <button className="btn btn-success" onClick={coverPhotoUpdate}>Update Cover Picture</button>
                 </div>
                 <div className="flex flex-col gap-8 w-full h-fit">
-                    <CoverPhoto/>
+                    {coverPhotoPreview ? <CoverPhoto src={coverPhotoPreview}/> : <CoverPhoto/> }
                     <div className="flex flex-col gap-2">
                         <input
                             type="file"

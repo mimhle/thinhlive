@@ -14,7 +14,7 @@ export default function Profile() {
             <div className="w-full h-fit">
                 <div className="w-full h-fit">
                     <div className="w-full">
-                        <img src='https://res-console.cloudinary.com/dnqzspoci/thumbnails/v1/image/upload/v1730482243/YmFubmVyNF94b2JpYWM=/drilldown' />
+                        <img src='./banner1.png' />
                     </div>
                 </div>
                 <div className="w-full px-4 -translate-y-1/3">

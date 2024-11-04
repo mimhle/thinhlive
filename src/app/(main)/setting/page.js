@@ -37,13 +37,13 @@ export default function Setting() {
                                     if (r.status === "success") {
                                         setUserData(data.username, {avatar: r.result.url}).then(result => {
                                             console.log(result);
-                                            location.reload();
+                                            window.location.reload();
                                         });
                                     }
                                 });
                             }}
                         />
-                        <span className="text-white/50 mx-5">Must be JPG, PNG, JPEG</span>
+                        <span className="text-white/50 mx-5">Must be JPG, PNG, JPEG and smaller 25MB</span>
                     </div>
                 </div>
             </div>

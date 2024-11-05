@@ -43,9 +43,9 @@ export default function Page() {
                 <h1 className="text-2xl font-bold">Sign up</h1>
                 <input placeholder="Username" className="input input-bordered" value={username}
                        onChange={e => setUsername(e.target.value)}/>
-                <Password placeholder="Password" type="password" className="input input-bordered" value={password}
+                <Password placeholder="Password" className="input input-bordered" value={password}
                           onChange={e => setPassword(e.target.value)}/>
-                <Password placeholder="Confirm password" type="password" className="input input-bordered"
+                <Password placeholder="Confirm password" className="input input-bordered"
                           value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
                 <Button className="btn btn-primary" onClick={submit}>Create account</Button>
                 <div className="flex flex-row justify-end">

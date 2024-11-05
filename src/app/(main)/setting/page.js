@@ -17,6 +17,8 @@ export default function Setting() {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
 
     useEffect(() => {
         getUserData().then(r => {
@@ -88,11 +90,31 @@ export default function Setting() {
     };
 
     const changePassword = () => {
-        if(confirmPassword !== newPassword) {
-            alert("Passwords do not match");
-
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            alert("Please fill in all fields.");
+            return;
         }
-    }
+
+        if (newPassword !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        setIsUpdatingPassword(true);
+        setUserData(data.username, {password: currentPassword, new_password: newPassword}).then(result => {
+            console.log(result);
+            if (result.status === "success") {
+                alert("Password changed successfully.");
+                setCurrentPassword("");
+                setNewPassword("");
+                setConfirmPassword("");
+                setIsUpdatingPassword(false);
+            } else {
+                alert("Failed to change password. Please try again.");
+                setIsUpdatingPassword(false);
+            }
+        });
+    };
 
     return (
         <div
@@ -166,29 +188,38 @@ export default function Setting() {
                 </div>
             </div>
             <div className="w-full h-fit bg-white/5 rounded-2xl">
-                <div className="p-10 flex flex-col gap-8">
+                <div className="relative p-10 flex flex-col gap-8">
                     <div className="flex justify-between items-center">
-                        <span className="font-extrabold text-2xl">Security</span>
+                        <span className="font-extrabold text-2xl z-20">Security</span>
                         <button
                             className="btn btn-outline btn-success"
                             onClick={changePassword}
-                            // disabled={isUpdatingCoverPhoto}
+                            disabled={isUpdatingPassword}
                         >
                             Change Password
                         </button>
                     </div>
+                    {isUpdatingPassword && (
+                        <div
+                            className="absolute inset-0 bg-black/50 z-10 flex items-center justify-center rounded-2xl">
+                            <span className="loading loading-ring loading-lg"></span>
+                        </div>
+                    )}
                     <div className="flex flex-col w-2/5 gap-8">
                         <div className="flex flex-col gap-4">
-                            <span>Current password</span>
-                            <input type="password" className="input input-bordered" value={currentPassword}/>
+                            <span className="z-20">Current password</span>
+                            <Password className="input input-bordered" value={currentPassword}
+                                      onChange={(e) => setCurrentPassword(e.target.value)}/>
                         </div>
                         <div className="flex flex-col gap-4">
-                            <span>New password</span>
-                            <input type="password" className="input input-bordered" value={newPassword}/>
+                            <span className="z-20">New password</span>
+                            <Password className="input input-bordered" value={newPassword}
+                                      onChange={(e) => setNewPassword(e.target.value)}/>
                         </div>
                         <div className="flex flex-col gap-4">
-                            <span>Confirm password</span>
-                            <input type="password" className="input input-bordered" value={confirmPassword}/>
+                            <span className="z-20">Confirm password</span>
+                            <Password className="input input-bordered" value={confirmPassword}
+                                      onChange={(e) => setConfirmPassword(e.target.value)}/>
                         </div>
                     </div>
                 </div>

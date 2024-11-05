@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {uploadMedia, setUserData, getUserData} from "/lib/frontend/api";
 import Avatar from "@/app/(main)/Avatar";
 import CoverPhoto from "@/app/(main)/CoverPhoto";
+import Password from "@/app/Password";
 
 export default function Setting() {
     const [data, setData] = useState(null);
@@ -13,6 +14,9 @@ export default function Setting() {
     const [coverPhotoPreview, setCoverPhotoPreview] = useState(null);
     const [isUpdatingAvatar, setIsUpdatingAvatar] = useState(false);
     const [isUpdatingCoverPhoto, setIsUpdatingCoverPhoto] = useState(false);
+    const [currentPassword, setCurrentPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     useEffect(() => {
         getUserData().then(r => {
@@ -45,6 +49,7 @@ export default function Setting() {
             </div>
         );
     }
+
 
     const avatarUpdate = () => {
         if (avatarFile) {
@@ -82,6 +87,13 @@ export default function Setting() {
         }
     };
 
+    const changePassword = () => {
+        if(confirmPassword !== newPassword) {
+            alert("Passwords do not match");
+
+        }
+    }
+
     return (
         <div
             className="h-screen w-screen bg-gradient-to-b from-neutral to-base-300 via-base-300 via-90% overflow-x-hidden flex flex-col gap-4 py-20 px-40">
@@ -94,7 +106,7 @@ export default function Setting() {
                             onClick={avatarUpdate}
                             disabled={isUpdatingAvatar}
                         >
-                            Update Profile Picture
+                            Change Profile Picture
                         </button>
                     </div>
                     <div className="flex flex-row gap-8 items-center w-full h-fit">
@@ -128,7 +140,7 @@ export default function Setting() {
                             onClick={coverPhotoUpdate}
                             disabled={isUpdatingCoverPhoto}
                         >
-                            Update Cover Picture
+                            Change Cover Picture
                         </button>
                     </div>
                     <div className="flex flex-col gap-8 w-full h-fit">
@@ -159,14 +171,25 @@ export default function Setting() {
                         <span className="font-extrabold text-2xl">Security</span>
                         <button
                             className="btn btn-outline btn-success"
-                            // onClick={coverPhotoUpdate}
+                            onClick={changePassword}
                             // disabled={isUpdatingCoverPhoto}
                         >
-                            Update Password
+                            Change Password
                         </button>
                     </div>
-                    <div className="flex flex-col gap-8 w-full h-fit">
-
+                    <div className="flex flex-col w-2/5 gap-8">
+                        <div className="flex flex-col gap-4">
+                            <span>Current password</span>
+                            <input type="password" className="input input-bordered" value={currentPassword}/>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <span>New password</span>
+                            <input type="password" className="input input-bordered" value={newPassword}/>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <span>Confirm password</span>
+                            <input type="password" className="input input-bordered" value={confirmPassword}/>
+                        </div>
                     </div>
                 </div>
             </div>

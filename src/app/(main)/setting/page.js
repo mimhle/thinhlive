@@ -5,8 +5,10 @@ import {uploadMedia, setUserData, getUserData} from "/lib/frontend/api";
 import Avatar from "@/app/(main)/Avatar";
 import CoverPhoto from "@/app/(main)/CoverPhoto";
 import Password from "@/app/Password";
+import useAlert from "@/app/Alert";
 
 export default function Setting() {
+    const {contextHolder, alert} = useAlert();
     const [data, setData] = useState(null);
     const [avatarFile, setAvatarFile] = useState(null);
     const [coverPhotoFile, setCoverPhotoFile] = useState(null);
@@ -67,7 +69,10 @@ export default function Setting() {
                 }
             });
         } else {
-            alert("Please select a file for the profile picture.");
+            alert({
+                children: "Please select a file for the profile picture.",
+                type: "error"
+            });
         }
     };
 
@@ -85,18 +90,27 @@ export default function Setting() {
                 }
             });
         } else {
-            alert("Please select a file for the cover photo.");
+            alert({
+                children: "Please select a file for the cover photo.",
+                type: "error"
+            });
         }
     };
 
     const changePassword = () => {
         if (!currentPassword || !newPassword || !confirmPassword) {
-            alert("Please fill in all fields.");
+            alert({
+                children: "Please fill in all fields.",
+                type: "error"
+            });
             return;
         }
 
         if (newPassword !== confirmPassword) {
-            alert("Passwords do not match.");
+            alert({
+                children: "Passwords do not match.",
+                type: "error"
+            });
             return;
         }
 
@@ -104,13 +118,19 @@ export default function Setting() {
         setUserData(data.username, {password: currentPassword, new_password: newPassword}).then(result => {
             console.log(result);
             if (result.status === "success") {
-                alert("Password changed successfully.");
+                alert({
+                    children: "Password changed successfully.",
+                    type: "success"
+                });
                 setCurrentPassword("");
                 setNewPassword("");
                 setConfirmPassword("");
                 setIsUpdatingPassword(false);
             } else {
-                alert("Failed to change password. Please try again.");
+                alert({
+                    children: "Failed to change password. Please try again.",
+                    type: "error"
+                });
                 setIsUpdatingPassword(false);
             }
         });
@@ -119,6 +139,7 @@ export default function Setting() {
     return (
         <div
             className="h-screen w-screen bg-gradient-to-b from-neutral to-base-300 via-base-300 via-90% overflow-x-hidden flex flex-col gap-4 py-20 px-40">
+            {contextHolder}
             <div className="w-full h-fit bg-white/5 rounded-2xl">
                 <div className="p-10 flex flex-col gap-8">
                     <div className="flex justify-between items-center">

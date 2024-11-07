@@ -63,7 +63,7 @@ export default function useAlert() {
     };
 
     return {
-        contextHolder: <div className="absolute top-0 right-0 flex flex-col gap-0 w-80 h-fit">
+        contextHolder: <div className="absolute top-0 right-0 flex flex-col gap-0 w-80 h-fit z-[999]">
             <AnimatePresence mode="popLayout">
                 {alerts.map((alert) => {
                     return <Item key={alert._id}>

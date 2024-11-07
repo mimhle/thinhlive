@@ -17,7 +17,10 @@ export default function Page() {
         e.preventDefault();
         load();
         if (password !== confirmPassword) {
-            alert("Passwords do not match");
+            alert({
+                children: "Passwords do not match",
+                type: "error"
+            })
             finish();
             return;
         }

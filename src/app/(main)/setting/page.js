@@ -8,7 +8,7 @@ import Password from "@/app/Password";
 import useAlert from "@/app/Alert";
 
 export default function Setting() {
-    const {contextHolder, alert} = useAlert();
+    const { contextHolder, alert } = useAlert();
     const [data, setData] = useState(null);
     const [avatarFile, setAvatarFile] = useState(null);
     const [coverPhotoFile, setCoverPhotoFile] = useState(null);
@@ -60,7 +60,7 @@ export default function Setting() {
             setIsUpdatingAvatar(true);
             uploadMedia(avatarFile).then(r => {
                 if (r.status === "success") {
-                    setUserData(data.username, {avatar: r.result.url}).then(result => {
+                    setUserData(data.username, { avatar: r.result.url }).then(result => {
                         console.log(result);
                         setIsUpdatingAvatar(false);
                     });
@@ -81,7 +81,7 @@ export default function Setting() {
             setIsUpdatingCoverPhoto(true);
             uploadMedia(coverPhotoFile).then(r => {
                 if (r.status === "success") {
-                    setUserData(data.username, {coverphoto: r.result.url}).then(result => {
+                    setUserData(data.username, { coverphoto: r.result.url }).then(result => {
                         console.log(result);
                         setIsUpdatingCoverPhoto(false);
                     });
@@ -115,7 +115,7 @@ export default function Setting() {
         }
 
         setIsUpdatingPassword(true);
-        setUserData(data.username, {password: currentPassword, new_password: newPassword}).then(result => {
+        setUserData(data.username, { password: currentPassword, new_password: newPassword }).then(result => {
             console.log(result);
             if (result.status === "success") {
                 alert({

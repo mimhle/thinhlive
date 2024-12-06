@@ -4,7 +4,7 @@ import daisyui from "daisyui";
 import typography from "@tailwindcss/typography";
 import fluid, { extract, screens } from "fluid-tailwind";
 
-module.exports = {
+export default {
     content: {
         files: [
             "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",

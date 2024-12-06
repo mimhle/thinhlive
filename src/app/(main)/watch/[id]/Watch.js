@@ -83,19 +83,19 @@ export default function Watch() {
         };
     }, []);
 
-    return <div className="w-full h-screen p-10">
+    return <LiveKitRoom
+        token={token}
+        serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WEBSOCKET_URL}
+        className="w-full h-screen p-10"
+    >
         <div className="w-ful h-full flex">
             <div className="flex flex-col gap-2 w-2/3">
                 <div className="relative h-full" ref={videoRef}>
                     <div
                         className="rounded-xl w-full h-full flex items-center justify-center bg-white/10 z-[2]">
-                        <LiveKitRoom
-                            token={token}
-                            serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WEBSOCKET_URL}
-                            className="w-full h-full !rounded-xl overflow-hidden"
-                        >
+                        <div className="w-full h-full !rounded-xl overflow-hidden">
                             <MediaRenderer id={id}/>
-                        </LiveKitRoom>
+                        </div>
                     </div>
                     <div
                         className="absolute top-0 w-full h-full rounded-xl flex flex-col justify-between items-center text-2xl p-2 bg-transparent z-[3]">
@@ -152,5 +152,5 @@ export default function Watch() {
                 </div>
             </div>
         </div>
-    </div>;
+    </LiveKitRoom>;
 }

@@ -28,7 +28,7 @@ function MediaRenderer({id}) {
     return [...tracks.map((track, i) => {
         return <VideoTrack className="w-full h-full object-fill" trackRef={track} key={i} />;
     }), ...audioTracks.map((track, i) => {
-        return <AudioTrack trackRef={track} key={i} />;
+        return <AudioTrack trackRef={track} key={-i} />;
     })];
 }
 

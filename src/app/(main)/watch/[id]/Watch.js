@@ -9,18 +9,26 @@ import {
 } from "@heroicons/react/24/outline";
 import {HeartIcon as HeartFilled} from "@heroicons/react/24/solid";
 import {useEffect, useRef, useState} from "react";
-import { getLiveRoom, getLiveRooms, getLiveToken, getUserData } from "/lib/frontend/api";
+import { getLiveRoom, getLiveToken, getUserData } from "/lib/frontend/api";
 import { useParams } from "next/navigation";
-import { LiveKitRoom, useParticipants, useTracks, VideoTrack } from "@livekit/components-react";
+import {
+    AudioTrack,
+    LiveKitRoom,
+    useTracks,
+    VideoTrack
+} from "@livekit/components-react";
 import { Track } from "livekit-client";
 
 
-function MediaRenderer() {
+function MediaRenderer({id}) {
     const tracks = useTracks([Track.Source.Camera, Track.Source.ScreenShare]);
+    const audioTracks = useTracks([Track.Source.Microphone]);
 
-    return tracks.map((track, i) => {
+    return [...tracks.map((track, i) => {
         return <VideoTrack className="w-full h-full object-fill" trackRef={track} key={i} />;
-    });
+    }), ...audioTracks.map((track, i) => {
+        return <AudioTrack trackRef={track} key={i} />;
+    })];
 }
 
 export default function Watch() {
@@ -84,8 +92,9 @@ export default function Watch() {
                         <LiveKitRoom
                             token={token}
                             serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WEBSOCKET_URL}
+                            className="w-full h-full !rounded-xl overflow-hidden"
                         >
-                            <MediaRenderer/>
+                            <MediaRenderer id={id}/>
                         </LiveKitRoom>
                     </div>
                     <div

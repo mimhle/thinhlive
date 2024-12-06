@@ -23,7 +23,7 @@ import { Track } from "livekit-client";
 
 function MediaRenderer({id}) {
     const tracks = useTracks([Track.Source.Camera, Track.Source.ScreenShare]);
-    const audioTracks = useTracks([Track.Source.Microphone]);
+    const audioTracks = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio]);
 
     return [...tracks.map((track, i) => {
         return <VideoTrack className="w-full h-full object-fill" trackRef={track} key={i} />;

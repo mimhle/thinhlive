@@ -34,11 +34,13 @@ function MediaRenderer({id}) {
 
 function Chat() {
     const { send, chatMessages, update } = useChat();
+    const messageBox = useRef(null);
 
     const onKeyPressHandler = (e) => {
         if (e.key === "Enter") {
             send(e.target.value);
             e.target.value = '';
+            messageBox.current?.lastElementChild?.scrollIntoView?.({ behavior: 'smooth', block: 'end' });
         }
     }
 
@@ -46,9 +48,8 @@ function Chat() {
         <div className="flex w-full h-10 justify-between items-center bg-white/20 p-4 rounded-t-lg">
             <span>Live chat</span>
         </div>
-        <div className="bg-white/10 w-full h-5/6">
+        <div className="bg-white/10 w-full h-5/6 overflow-x-scroll" ref={messageBox}>
             {chatMessages.map((msg, i) => {
-                console.log(msg);
                 return <div className="w-full p-2" key={i}>
                     <div className="flex gap-2">
                         <span className="text-white">{msg.from.identity}:</span>

@@ -16,6 +16,7 @@ export default function Page() {
                     const r = new Room();
                     r.connect(process.env.NEXT_PUBLIC_LIVEKIT_WEBSOCKET_URL, data.token).then(() => {
                         r.localParticipant.setCameraEnabled(true);
+                        r.localParticipant.setMicrophoneEnabled(true);
                         setRoom(r);
                     });
                 }

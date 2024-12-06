@@ -15,7 +15,8 @@ import {
     AudioTrack,
     LiveKitRoom,
     useTracks,
-    VideoTrack
+    VideoTrack,
+    useChat
 } from "@livekit/components-react";
 import { Track } from "livekit-client";
 
@@ -29,6 +30,40 @@ function MediaRenderer({id}) {
     }), ...audioTracks.map((track, i) => {
         return <AudioTrack trackRef={track} key={i} />;
     })];
+}
+
+function Chat() {
+    const { send, chatMessages, update } = useChat();
+
+    const onKeyPressHandler = (e) => {
+        if (e.key === "Enter") {
+            send(e.target.value);
+            e.target.value = '';
+        }
+    }
+
+    return <>
+        <div className="flex w-full h-10 justify-between items-center bg-white/20 p-4 rounded-t-lg">
+            <span>Live chat</span>
+        </div>
+        <div className="bg-white/10 w-full h-5/6">
+            {chatMessages.map((msg, i) => {
+                console.log(msg);
+                return <div className="w-full p-2" key={i}>
+                    <div className="flex gap-2">
+                        <span className="text-white">{msg.from.identity}:</span>
+                        <span className="text-white">{msg.message}</span>
+                    </div>
+                </div>;
+            })}
+        </div>
+        <div className="w-full">
+            <label className="input input-bordered flex items-center gap-2">
+                <ChatBubbleLeftEllipsisIcon className="h-5"/>
+                <input type="text" className="grow" placeholder="Type a message..." onKeyDown={onKeyPressHandler}/>
+            </label>
+        </div>
+    </>;
 }
 
 export default function Watch() {
@@ -52,13 +87,6 @@ export default function Watch() {
             document.exitFullscreen();
         }
     };
-
-    const onKeyPressHandler = (e) => {
-        if (e.key === "Enter") {
-            console.log(e.target.value);
-            e.target.value = '';
-        }
-    }
 
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -140,16 +168,7 @@ export default function Watch() {
                 </div>
             </div>
             <div className="w-1/3 h-full translate-x-2">
-                <div className="flex w-full h-10 justify-between items-center bg-white/20 p-4 rounded-t-lg">
-                    <span>Live chat</span>
-                </div>
-                <div className="bg-white/10 w-full h-5/6"></div>
-                <div className="w-full">
-                    <label className="input input-bordered flex items-center gap-2">
-                        <ChatBubbleLeftEllipsisIcon className="h-5"/>
-                        <input type="text" className="grow" placeholder="Type a message..." onKeyDown={onKeyPressHandler}/>
-                    </label>
-                </div>
+                <Chat/>
             </div>
         </div>
     </LiveKitRoom>;

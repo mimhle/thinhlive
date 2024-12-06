@@ -16,9 +16,9 @@ import {
     LiveKitRoom,
     useTracks,
     VideoTrack,
-    useChat, ConnectionQualityIndicator
+    useChat, useRoomContext
 } from "@livekit/components-react";
-import { Track } from "livekit-client";
+import { RoomEvent, Track } from "livekit-client";
 
 
 function MediaRenderer({id}) {
@@ -33,7 +33,7 @@ function MediaRenderer({id}) {
 }
 
 function Chat() {
-    const { send, chatMessages, update } = useChat();
+    const { send, chatMessages } = useChat();
     const messageBox = useRef(null);
 
     const onKeyPressHandler = (e) => {
@@ -66,6 +66,32 @@ function Chat() {
             </label>
         </div>
     </>;
+}
+
+function ViewerCount() {
+    const room = useRoomContext();
+    const [viewer, setViewer] = useState(0);
+    let loaded = useRef(false);
+
+    useEffect(() => {
+        if (loaded.current) return;
+        room.on(RoomEvent.Connected, () => {
+            setViewer(room.remoteParticipants.size);
+        });
+        room.on(RoomEvent.ParticipantConnected, () => {
+            setViewer(room.remoteParticipants.size);
+        });
+        room.on(RoomEvent.ParticipantDisconnected, () => {
+            setViewer(room.remoteParticipants.size);
+        });
+        loaded.current = true;
+    }, [room]);
+
+    return <div
+        className="flex items-center bg-black/50 text-white rounded-xl h-fit w-fit text-sm px-2">
+        <EyeIcon className="h-5 mr-2"/>
+        {viewer}
+    </div>;
 }
 
 export default function Watch() {
@@ -130,11 +156,7 @@ export default function Watch() {
                     <div
                         className="absolute top-0 w-full h-full rounded-xl flex flex-col justify-between items-center text-2xl p-2 bg-transparent z-[3]">
                         <div className="flex gap-2 w-fit h-8 ml-auto">
-                            <div
-                                className="flex items-center bg-black/50 text-white rounded-xl h-fit w-fit text-sm px-2">
-                                <EyeIcon className="h-5 mr-2"/>
-                                {viewer}
-                            </div>
+                            <ViewerCount/>
                             <div
                                 className="flex items-center bg-red-500 text-white rounded-xl h-fit w-fit text-sm px-2">
                                 LIVE

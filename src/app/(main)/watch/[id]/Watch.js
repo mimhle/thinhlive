@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import {HeartIcon as HeartFilled} from "@heroicons/react/24/solid";
 import {useEffect, useRef, useState} from "react";
-import { getLiveRoom, getLiveToken, getUserData } from "/lib/frontend/api";
+import { getLiveToken, getUserData } from "/lib/frontend/api";
 import { useParams } from "next/navigation";
 import {
     AudioTrack,
@@ -102,7 +102,6 @@ export default function Watch() {
     const params = useParams();
     const { id } = params;
     const [token, setToken] = useState("");
-    const [viewer, setViewer] = useState(0);
 
     const handleLike = () => {
         setLike(!like);
@@ -128,9 +127,6 @@ export default function Watch() {
             r = r.user;
             getLiveToken(id, r.username).then(data => {
                 setToken(data.token);
-            });
-            getLiveRoom(id).then(data => {
-                setViewer(data.numParticipants-1);
             });
         });
 

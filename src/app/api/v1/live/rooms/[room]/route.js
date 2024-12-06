@@ -1,9 +1,30 @@
 import { NextResponse } from "next/server";
-import { roomService } from "/lib/backend/livekitRoomService";
+import { getLive, isLive, setCurrentLiveData } from "/lib/backend/live";
+import { verifySession } from "/lib/backend/auth";
 
 export async function GET(request) {
     const room = new URL(request.url).pathname.split('/').at(-1);
-    const rooms = await roomService.listRooms();
+    return NextResponse.json({status: "success", result: await getLive(room)});
+}
 
-    return NextResponse.json(JSON.parse(JSON.stringify(rooms.find(r => r.name === room) || {})));
+export async function POST(request) {
+    const room = new URL(request.url).pathname.split('/').at(-1);
+    const data = await request.json();
+    if (!await isLive(room)) return NextResponse.json({status: "error", message: "Room is not live."});
+    await setCurrentLiveData(room, data);
+    return NextResponse.json({status: "success", result: await getLive(room)});
+}
+
+export async function DELETE(request) {
+    const sessionId = request.cookies.get("session_id")?.value;
+    const username = request.cookies.get("username")?.value;
+    const room = new URL(request.url).pathname.split('/').at(-1);
+
+    if (!await verifySession(username, sessionId) || room !== username) {
+        return NextResponse.json({status: "error", message: "Authentication failed."});
+    }
+
+    if (!await isLive(room)) return NextResponse.json({status: "error", message: "Room is not live."});
+    await setCurrentLiveData(room, {live: false});
+    return NextResponse.json({status: "success"});
 }

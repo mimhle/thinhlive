@@ -34,12 +34,14 @@ export default function Home() {
         setUsername(getCookieValue("username"));
 
         getLiveRooms().then(data => {
+            if (data.status !== "success") return;
+            data = data.result;
             data = data.map(room => {
                 return {
                     title: room.title,
-                    description: room.name,
-                    image: room.image,
-                    link: `/watch/${room.name}`
+                    description: room.username,
+                    thumbnail: room.thumbnail,
+                    link: `/watch/${room.username}`
                 };
             });
             setRecommendations(data);

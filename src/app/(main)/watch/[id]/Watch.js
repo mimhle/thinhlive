@@ -16,7 +16,7 @@ import {
     LiveKitRoom,
     useTracks,
     VideoTrack,
-    useChat
+    useChat, ConnectionQualityIndicator
 } from "@livekit/components-react";
 import { Track } from "livekit-client";
 
@@ -38,6 +38,7 @@ function Chat() {
 
     const onKeyPressHandler = (e) => {
         if (e.key === "Enter") {
+            if (!e.target.value) return;
             send(e.target.value);
             e.target.value = '';
             messageBox.current?.lastElementChild?.scrollIntoView?.({ behavior: 'smooth', block: 'end' });

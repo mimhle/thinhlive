@@ -1,5 +1,3 @@
-"use server";
-
 import { NextResponse } from "next/server";
 import { verifySession } from "/lib/backend/auth";
 import { upload } from "/lib/backend/media";
@@ -15,4 +13,4 @@ export async function POST(request) {
     return NextResponse.json({ status: "failed", message: "Authentication failed" });
 }
 
-export const revalidate = 0;
+export const fetchCache = 'force-no-store'

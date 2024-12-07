@@ -19,4 +19,4 @@ export async function GET(request) {
     return NextResponse.json({ token: await createToken(room, name) });
 }
 
-export const fetchCache = 'force-no-store'
+export const revalidate = 0;

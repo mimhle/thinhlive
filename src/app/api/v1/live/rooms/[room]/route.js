@@ -33,4 +33,4 @@ export async function DELETE(request) {
     return NextResponse.json({status: "success"});
 }
 
-export const fetchCache = 'force-no-store'
+export const revalidate = 0;

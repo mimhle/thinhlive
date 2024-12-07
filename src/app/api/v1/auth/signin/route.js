@@ -16,4 +16,4 @@ export async function POST(request) {
     return NextResponse.json({ status: "failed", message: "Failed to sign in" });
 }
 
-export const fetchCache = 'force-no-store'
+export const revalidate = 0;

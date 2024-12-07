@@ -13,3 +13,5 @@ export async function POST(request) {
     }
     return NextResponse.json({ status: "failed", message: "Failed to log out" });
 }
+
+export const revalidate = 0;

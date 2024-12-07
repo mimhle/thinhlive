@@ -22,10 +22,9 @@ export async function GET(request) {
     
     if (await verifySession(username, sessionId)) {
         const user = await getUser(username);
-
-        const response = NextResponse.json({ status: "success", user: user });
-        return response;
+        return NextResponse.json({ status: "success", user: user });
     }
     return NextResponse.json({ status: "failed", message: "Authentication failed" });
 }
 
+export const revalidate = 0;

@@ -32,3 +32,5 @@ export async function DELETE(request) {
     await roomService.deleteRoom(room);
     return NextResponse.json({status: "success"});
 }
+
+export const revalidate = 0;

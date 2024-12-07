@@ -39,9 +39,11 @@ export default function Home() {
             data = data.map(room => {
                 return {
                     title: room.title,
-                    description: room.username,
+                    username: room.username,
                     thumbnail: room.thumbnail,
-                    link: `/watch/${room.username}`
+                    link: `/watch/${room.username}`,
+                    runtime: new Date().valueOf() - room.created_at,
+                    live: room.live,
                 };
             });
             setRecommendations(data);

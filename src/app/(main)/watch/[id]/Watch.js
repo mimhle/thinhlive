@@ -5,7 +5,8 @@ import {
     ArrowsPointingInIcon,
     ArrowsPointingOutIcon,
     HeartIcon,
-    EyeIcon
+    EyeIcon,
+    ClockIcon
 } from "@heroicons/react/24/outline";
 import {HeartIcon as HeartFilled} from "@heroicons/react/24/solid";
 import {useEffect, useRef, useState} from "react";
@@ -16,12 +17,13 @@ import {
     LiveKitRoom,
     useTracks,
     VideoTrack,
-    useChat, useRoomContext
+    useChat, useRoomContext,
 } from "@livekit/components-react";
 import { RoomEvent, Track } from "livekit-client";
+import { secondsToHms } from "../../../../../lib/frontend/utils";
 
 
-function MediaRenderer({id}) {
+function MediaRenderer() {
     const tracks = useTracks([Track.Source.Camera, Track.Source.ScreenShare]);
     const audioTracks = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio]);
 
@@ -32,9 +34,20 @@ function MediaRenderer({id}) {
     })];
 }
 
-function Chat({disabled = false}) {
+function Chat({placeholder = "", anon = false}) {
     const { send, chatMessages } = useChat();
     const messageBox = useRef(null);
+    const room = useRoomContext();
+    const [disabled, setDisabled] = useState(true);
+
+    useEffect(() => {
+        room.on(RoomEvent.Connected, () => {
+            setDisabled(false);
+        });
+        room.on(RoomEvent.Disconnected, () => {
+            setDisabled(true);
+        });
+    }, [room]);
 
     const onKeyPressHandler = (e) => {
         if (e.key === "Enter") {
@@ -53,7 +66,7 @@ function Chat({disabled = false}) {
             {chatMessages.map((msg, i) => {
                 return <div className="w-full p-2" key={i}>
                     <div className="flex gap-2">
-                        <span className="text-white">{msg.from.identity}:</span>
+                        <span className="text-white font-bold">{msg.from.identity}:</span>
                         <span className="text-white">{msg.message}</span>
                     </div>
                 </div>;
@@ -62,7 +75,7 @@ function Chat({disabled = false}) {
         <div className="w-full">
             <label className="input input-bordered flex items-center gap-2">
                 <ChatBubbleLeftEllipsisIcon className="h-5"/>
-                <input type="text" className="grow" placeholder={disabled ? (disabled === true ? "" : disabled) : "Type a message..."} onKeyDown={onKeyPressHandler} disabled={!!disabled}/>
+                <input type="text" className="grow" placeholder={placeholder ? placeholder : "Type a message..."} onKeyDown={onKeyPressHandler} disabled={disabled || anon}/>
             </label>
         </div>
     </>;
@@ -91,6 +104,28 @@ function ViewerCount() {
         className="flex items-center bg-black/50 text-white rounded-xl h-fit w-fit text-sm px-2">
         <EyeIcon className="h-5 mr-2"/>
         {viewer}
+    </div>;
+}
+
+function LiveLength() {
+    const room = useRoomContext();
+    const [time, setTime] = useState(null);
+    let loaded = useRef(false);
+
+    useEffect(() => {
+        if (loaded.current) return;
+        room.on(RoomEvent.Connected, () => {
+            const startTime = new Date(Number(room.roomInfo.creationTime)).valueOf();
+            setInterval(() => {
+                setTime(Math.round((new Date().valueOf()/1000) - startTime));
+            }, 1000);
+        });
+        loaded.current = true;
+    }, [room]);
+
+    return <div className="flex items-center bg-black/50 text-white rounded-xl h-fit w-fit text-sm px-2">
+        <ClockIcon className="h-5 mr-1"/>
+        {secondsToHms(time)}
     </div>;
 }
 
@@ -153,12 +188,13 @@ export default function Watch() {
                     <div
                         className="rounded-xl w-full h-full flex items-center justify-center bg-white/10 z-[2]">
                         <div className="w-full h-full !rounded-xl overflow-hidden">
-                            <MediaRenderer id={id}/>
+                            <MediaRenderer/>
                         </div>
                     </div>
                     <div
                         className="absolute top-0 w-full h-full rounded-xl flex flex-col justify-between items-center text-2xl p-2 bg-transparent z-[3]">
                         <div className="flex gap-2 w-fit h-8 ml-auto">
+                            <LiveLength/>
                             <ViewerCount/>
                             <div
                                 className="flex items-center bg-red-500 text-white rounded-xl h-fit w-fit text-sm px-2">
@@ -195,7 +231,7 @@ export default function Watch() {
                 </div>
             </div>
             <div className="w-1/3 h-full translate-x-2">
-                <Chat disabled={anon ? "Login to chat" : false}/>
+                <Chat placeholder={anon ? "Login to chat" : ""} anon={anon}/>
             </div>
         </div>
     </LiveKitRoom>;

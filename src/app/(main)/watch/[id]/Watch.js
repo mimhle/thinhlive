@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import {HeartIcon as HeartFilled} from "@heroicons/react/24/solid";
 import {useEffect, useRef, useState} from "react";
-import { getLiveToken, getUserData } from "/lib/frontend/api";
+import { getLiveRoom, getLiveToken, getUserData } from "/lib/frontend/api";
 import { useParams } from "next/navigation";
 import {
     AudioTrack,
@@ -32,7 +32,7 @@ function MediaRenderer({id}) {
     })];
 }
 
-function Chat() {
+function Chat({disabled = false}) {
     const { send, chatMessages } = useChat();
     const messageBox = useRef(null);
 
@@ -62,7 +62,7 @@ function Chat() {
         <div className="w-full">
             <label className="input input-bordered flex items-center gap-2">
                 <ChatBubbleLeftEllipsisIcon className="h-5"/>
-                <input type="text" className="grow" placeholder="Type a message..." onKeyDown={onKeyPressHandler}/>
+                <input type="text" className="grow" placeholder={disabled ? (disabled === true ? "" : disabled) : "Type a message..."} onKeyDown={onKeyPressHandler} disabled={!!disabled}/>
             </label>
         </div>
     </>;
@@ -102,6 +102,8 @@ export default function Watch() {
     const params = useParams();
     const { id } = params;
     const [token, setToken] = useState("");
+    const [anon, setAnon] = useState(false);
+    const [title, setTitle] = useState("Title");
 
     const handleLike = () => {
         setLike(!like);
@@ -125,8 +127,13 @@ export default function Watch() {
         getUserData().then(r => {
             if (r.status !== "success") return;
             r = r.user;
+            setAnon(r.anon);
             getLiveToken(id, r.username).then(data => {
                 setToken(data.token);
+            });
+            getLiveRoom(id).then(data => {
+                if (data.status !== "success") return;
+                setTitle(data.result.title);
             });
         });
 
@@ -184,11 +191,11 @@ export default function Watch() {
                     </div>
                 </div>
                 <div className="bg-white/10 text-2xl flex p-4 rounded-xl h-1/5">
-                    tittle
+                    {title}
                 </div>
             </div>
             <div className="w-1/3 h-full translate-x-2">
-                <Chat/>
+                <Chat disabled={anon ? "Login to chat" : false}/>
             </div>
         </div>
     </LiveKitRoom>;

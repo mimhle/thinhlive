@@ -49,6 +49,7 @@ export default function Page() {
         getUserData().then(r => {
             if (r.status !== "success") return;
             r = r.user;
+            if (r.anon) return;
             username.current = r.username;
             getLiveToken(r.username, r.username).then(data => {
                 if (!room) {
@@ -68,6 +69,7 @@ export default function Page() {
         });
 
         return () => {
+            video.current = null;
             if (room) {
                 room.disconnect();
                 setLiveData(username.current, { live: false }).then(r => console.log(r));

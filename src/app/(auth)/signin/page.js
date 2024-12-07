@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { signIn } from "/lib/frontend/api";
+import { signIn, signUp } from "/lib/frontend/api";
 import { useState } from "react";
 import Button from "@/app/Button";
 import useAlert from "@/app/Alert";
 import Password from "@/app/Password";
-import { choose } from "/lib/frontend/utils";
+import { randomString } from "/lib/frontend/utils";
 
 export default function Page() {
     const { contextHolder, alert } = useAlert();
@@ -30,6 +30,22 @@ export default function Page() {
         });
     };
 
+    const submitAnon = (e, load, finish) => {
+        e.preventDefault();
+        load();
+        signUp(`Anon_${randomString(4)}`, randomString(32), true).then(res => {
+            if (res.status === "success") {
+                window.location.href = "/";
+            } else {
+                finish();
+                alert({
+                    children: res.message,
+                    type: "error"
+                });
+            }
+        });
+    };
+
 
     return <div className="h-full flex flex-col justify-center min-h-screen w-screen">
         {contextHolder}
@@ -44,7 +60,7 @@ export default function Page() {
                     <Link className="link" href={"/signup"}>Don&apos;t have an account?</Link>
                 </div>
                 <div className="divider">OR</div>
-                <button className="btn btn-ghost">Continue as guest</button>
+                <Button className="btn btn-ghost" onClick={submitAnon}>Continue as guest</Button>
             </div>
         </div>
     </div>;

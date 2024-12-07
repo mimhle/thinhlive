@@ -5,8 +5,8 @@ import { createUser, generateSession, getUser, verifySession } from "/lib/backen
 
 export async function POST(request) {
     const body = await request.json();
-    const { username, password } = body;
-    if (await createUser(username, password)) {
+    const { username, password, anon } = body;
+    if (await createUser(username, password, anon)) {
         const sessionId = await generateSession(username);
         const response = NextResponse.json({ status: "success", message: "Account created" });
         response.cookies.set("session_id", sessionId);

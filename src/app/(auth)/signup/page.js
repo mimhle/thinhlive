@@ -34,7 +34,6 @@ export default function Page() {
                     type: "error"
                 });
             }
-
         });
     };
 

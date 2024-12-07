@@ -11,7 +11,7 @@ export default function Gallery({ items }) {
                     </div>
                     <div
                         className=" absolute bottom-0 right-0 flex items-center bg-base-200 text-white rounded-xl h-fit w-fit text-sm px-2">
-                        {item.runtime ? secondsToHms(item.runtime, true) : null}
+                        {item.runtime ? secondsToHms(item.runtime / 1000, true) : null}
                     </div>
                     <img src={item.thumbnail} alt="" className="w-full h-32 object-contain"/>
                 </div> : <div className="skeleton h-32 w-full opacity-5 bg-white"></div>}

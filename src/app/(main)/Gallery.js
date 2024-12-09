@@ -1,4 +1,4 @@
-import { secondsToHms } from "../../../lib/frontend/utils";
+import { secondsToHms } from "/lib/frontend/utils";
 
 export default function Gallery({ items }) {
     return <div className="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-2 w-auto m-2 place-items-center">

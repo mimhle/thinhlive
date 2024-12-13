@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { hashPassword, setUser, verifyUser } from "/lib/backend/auth";
+import { getUser, hashPassword, setUser, verifyUser } from "/lib/backend/auth";
 import { verifySession } from "/lib/backend/auth";
 
 export async function POST(request) {
@@ -23,6 +23,16 @@ export async function POST(request) {
         return NextResponse.json({ status: "success", result: body });
     }
     return NextResponse.json({ status: "failed", message: "Authentication failed" });
+}
+
+export async function GET(request) {
+    const username = new URL(request.url).pathname.split('/').at(-1);
+
+    if (username) {
+        const user = await getUser(username);
+        return NextResponse.json({ status: "success", user: user });
+    }
+    return NextResponse.json({ status: "failed", message: "Invalid username" });
 }
 
 export const revalidate = 0;

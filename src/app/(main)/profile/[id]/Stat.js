@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ListComponent from '../../List';
+import UserListModal from '@/app/(main)/UserListModal';
 
 export default function Stat({ followers = [], following = [] }) {
     const [showList, setShowList] = useState(false);
@@ -74,6 +74,7 @@ export default function Stat({ followers = [], following = [] }) {
                             }
                             type={listType}
                             onClose={() => setShowList(false)}
+                            href="/profile/"
                         />
                     </div>
                 </div>

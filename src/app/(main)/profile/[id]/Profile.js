@@ -3,14 +3,10 @@
 import { useEffect, useState } from 'react';
 import Gallery from '@/app/(main)/Gallery';
 import Stat from './Stat';
-import Avatar from '../../Avatar';
+import Avatar from '@/app/(main)/Avatar';
 import CoverPhoto from '@/app/(main)/CoverPhoto';
 import ActionButton from '@/app/(main)/actionButton';
-import {
-    getUserData,
-    getLiveRooms,
-    setUserData,
-} from '../../../../../lib/frontend/api';
+import { getUserData, getLiveRooms, setUserData } from '/lib/frontend/api';
 import useAlert from '@/app/Alert';
 
 export default function Profile({ id }) {
@@ -78,8 +74,6 @@ export default function Profile({ id }) {
         if (viewer) {
             const followersList = removeId(viewer.followers);
             const followingList = removeId(viewer.following);
-            console.log(followersList);
-            console.log(followingList);
             setFollowers(followersList);
             setFollowing(followingList);
         }

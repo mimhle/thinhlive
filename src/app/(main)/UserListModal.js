@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { getUserData } from '../../../lib/frontend/api';
 import Avatar from './Avatar';
 
-export default function ListComponent({
+export default function UserListModal({
     data = [],
     type = '',
     onClose = () => {},
+    href = '',
 }) {
     const [avatars, setAvatars] = useState({});
 
@@ -36,6 +37,11 @@ export default function ListComponent({
         fetchAvatars();
     }, [data]);
 
+    const handleClick = (href) => {
+        if (href === '') return;
+        window.location.href = href;
+    };
+
     return (
         <div
             className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center"
@@ -59,6 +65,7 @@ export default function ListComponent({
                         <li
                             key={username}
                             className="border-b py-2 flex items-center gap-4"
+                            onClick={() => handleClick(href + username)}
                         >
                             <div className="w-10 h-10">
                                 <Avatar src={avatars[username]} />

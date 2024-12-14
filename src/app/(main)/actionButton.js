@@ -6,7 +6,7 @@ import {
     MinusCircleIcon,
 } from '@heroicons/react/24/outline';
 
-export default function LiveButton({ str = '', type = '', event }) {
+export default function ActionButton({ str = '', type = '', event }) {
     const icons = {
         live: VideoCameraIcon,
         notFollow: PlusCircleIcon,

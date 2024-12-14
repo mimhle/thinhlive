@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-// import { cookies } from 'next/headers';
 import Gallery from '@/app/(main)/Gallery';
 import Stat from './Stat';
 import Avatar from '../../Avatar';
 import CoverPhoto from '@/app/(main)/CoverPhoto';
-import LiveButton from '@/app/(main)/liveButton';
+import ActionButton from '@/app/(main)/actionButton';
 import {
     getUserData,
     getLiveRooms,
@@ -15,7 +14,6 @@ import {
 import useAlert from '@/app/Alert';
 
 export default function Profile({ id }) {
-    // const cookieStore = cookies();
     const [recommendations, setRecommendations] = useState([]);
     const [buttonState, setButtonState] = useState({
         type: 'live',
@@ -24,8 +22,8 @@ export default function Profile({ id }) {
     const [currentUser, setCurrentUser] = useState(null);
     const [viewer, setViewer] = useState(null);
     const { contextHolder, alert } = useAlert();
-    const [following, setFollowing] = useState(0);
-    const [followers, setFollowers] = useState(0);
+    const [following, setFollowing] = useState([]);
+    const [followers, setFollowers] = useState([]);
 
     useEffect(() => {
         const fetchLiveRooms = async () => {
@@ -70,32 +68,20 @@ export default function Profile({ id }) {
         };
 
         fetchLiveRooms();
-    }, [viewer?.username]);
+    }, [id && viewer?.username]);
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const r = await getUserData(id);
-                if (r.status === 'success') {
-                    setViewer(r.user);
-                }
-
-                const user = await getUserData();
-                if (user.status === 'success') {
-                    setCurrentUser(user.user);
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
-        };
-
         fetchUserData();
     }, [id]);
 
     useEffect(() => {
         if (viewer) {
-            setFollowers(viewer.followers?.length || 0);
-            setFollowing(viewer.following?.length || 0);
+            const followersList = removeId(viewer.followers);
+            const followingList = removeId(viewer.following);
+            console.log(followersList);
+            console.log(followingList);
+            setFollowers(followersList);
+            setFollowing(followingList);
         }
     }, [viewer]);
 
@@ -111,7 +97,7 @@ export default function Profile({ id }) {
         } else {
             setButtonState({ type: 'live', str: 'Live' });
         }
-    }, [currentUser, viewer]);
+    }, [currentUser]);
 
     const addArray = (array, value) => {
         if (!Array.isArray(array)) {
@@ -140,17 +126,43 @@ export default function Profile({ id }) {
         return array;
     };
 
+    const removeId = (list) => {
+        if (!list || !Array.isArray(list)) {
+            return [];
+        }
+
+        return list.map((item) => {
+            if (item.username) {
+                return item.username;
+            }
+            return item;
+        });
+    };
+
+    const fetchUserData = async () => {
+        try {
+            const r = await getUserData(id);
+            if (r.status === 'success') {
+                setViewer(r.user);
+            }
+
+            const user = await getUserData();
+            if (user.status === 'success') {
+                setCurrentUser(user.user);
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
+
     const handleClick = async (type) => {
         if (type === 'notFollow') {
             setButtonState({ type: 'follow', str: 'Unfollow' });
             await setUserData(currentUser.username, {
-                following: addArray(viewer.following, viewer.username),
+                following: addArray(currentUser.following, viewer.username),
             });
             await setUserData(viewer.username, {
-                followers: addArray(
-                    currentUser.followers,
-                    currentUser.username
-                ),
+                followers: addArray(viewer.followers, currentUser.username),
             });
             alert({
                 children: 'You have followed ' + viewer.username,
@@ -159,13 +171,10 @@ export default function Profile({ id }) {
         } else if (type === 'follow') {
             setButtonState({ type: 'notFollow', str: 'Follow' });
             await setUserData(currentUser.username, {
-                following: removeArray(viewer.following, viewer.username),
+                following: removeArray(currentUser.following, viewer.username),
             });
             await setUserData(viewer.username, {
-                followers: removeArray(
-                    currentUser.followers,
-                    currentUser.username
-                ),
+                followers: removeArray(viewer.followers, currentUser.username),
             });
             alert({
                 children: 'You have unfollowed ' + viewer.username,
@@ -173,17 +182,7 @@ export default function Profile({ id }) {
             });
         }
 
-        getUserData(viewer.username).then((r) => {
-            if (r.status === 'success') {
-                setViewer(r.user);
-            }
-        });
-
-        getUserData(currentUser.username).then((r) => {
-            if (r.status === 'success') {
-                setCurrentUser(r.user);
-            }
-        });
+        fetchUserData();
     };
 
     return (
@@ -200,10 +199,9 @@ export default function Profile({ id }) {
                             <div className="flex justify-between w-full">
                                 <div className="text-4xl pt-8">
                                     {viewer?.username}
-                                    {/* {cookieStore.get('username')?.value} */}
                                 </div>
                                 <div>
-                                    <LiveButton
+                                    <ActionButton
                                         str={buttonState.str}
                                         type={buttonState.type}
                                         event={handleClick}

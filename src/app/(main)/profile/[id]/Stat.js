@@ -68,7 +68,7 @@ export default function Stat({ followers = [], following = [] }) {
                         >
                             &times;
                         </button>
-                        <ListComponent
+                        <UserListModal
                             data={
                                 listType === 'followers' ? followers : following
                             }

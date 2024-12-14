@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getUserData } from '../../../lib/frontend/api';
-import Avatar from './Avatar';
+import { getUserData } from '/lib/frontend/api';
+import Avatar from '@/app/(main)/Avatar';
 
 export default function UserListModal({
     data = [],

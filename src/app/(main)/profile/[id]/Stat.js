@@ -1,7 +1,12 @@
 import { useState } from 'react';
-import UserListModal from '@/app/(main)/UserListModal';
+import UserListModal from '@/app/(main)/profile/[id]/UserListModal';
 
-export default function Stat({ followers = [], following = [] }) {
+export default function Stat({
+    followers = [],
+    following = [],
+    authUser,
+    setAuthUser,
+}) {
     const [showList, setShowList] = useState(false);
     const [listType, setListType] = useState('');
 
@@ -75,6 +80,9 @@ export default function Stat({ followers = [], following = [] }) {
                             type={listType}
                             onClose={() => setShowList(false)}
                             href="/profile/"
+                            enableBtn={true}
+                            authUser={authUser}
+                            setAuthUser={setAuthUser}
                         />
                     </div>
                 </div>

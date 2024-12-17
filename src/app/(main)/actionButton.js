@@ -6,7 +6,12 @@ import {
     MinusCircleIcon,
 } from '@heroicons/react/24/outline';
 
-export default function ActionButton({ str = '', type = '', event }) {
+export default function ActionButton({
+    str = '',
+    type = '',
+    event,
+    className = '',
+}) {
     const icons = {
         live: VideoCameraIcon,
         notFollow: PlusCircleIcon,
@@ -16,9 +21,9 @@ export default function ActionButton({ str = '', type = '', event }) {
     const Icon = icons[type] || icons.live;
 
     return (
-        <div className="w-full h-full">
+        <div className={`flex items-center justify-center h-full ${className}`}>
             <a
-                className="btn btn-success bg-gradient-to-l from-primary to-secondary via-50% w-fit mt-10 flex text-xl text-white"
+                className="btn btn-success bg-gradient-to-l from-primary to-secondary via-50% flex items-center gap-2 px-10 py-1 text-white rounded-lg"
                 onClick={(e) => {
                     if (type !== 'live') {
                         e.preventDefault();
@@ -27,8 +32,8 @@ export default function ActionButton({ str = '', type = '', event }) {
                 }}
                 href={type === 'live' ? '/live' : undefined}
             >
-                <Icon className="h-6" />
-                {str}
+                <Icon className="h-10 w-10" />
+                <span className="text-lg font-medium">{str}</span>
             </a>
         </div>
     );

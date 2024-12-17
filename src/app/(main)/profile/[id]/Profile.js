@@ -5,7 +5,7 @@ import Gallery from '@/app/(main)/Gallery';
 import Stat from './Stat';
 import Avatar from '@/app/(main)/Avatar';
 import CoverPhoto from '@/app/(main)/CoverPhoto';
-import ActionButton from '@/app/(main)/actionButton';
+import ActionButton from '@/app/(main)/ActionButton';
 import { getUserData, getLiveRooms, setUserData } from '/lib/frontend/api';
 import useAlert from '@/app/Alert';
 
@@ -15,75 +15,23 @@ export default function Profile({ id }) {
         type: 'live',
         str: 'Live',
     });
-    const [currentUser, setCurrentUser] = useState(null);
-    const [viewer, setViewer] = useState(null);
+    const [authUser, setAuthUser] = useState(null);
+    const [profileUser, setProfileUser] = useState(null);
     const { contextHolder, alert } = useAlert();
-    const [following, setFollowing] = useState([]);
-    const [followers, setFollowers] = useState([]);
 
     useEffect(() => {
-        const fetchLiveRooms = async () => {
-            const data = await getLiveRooms();
-
-            if (data.status !== 'success') return;
-
-            let rooms = data.result.map((room) => ({
-                title: room.title,
-                username: room.username,
-                thumbnail: room.thumbnail,
-                link: `/watch/${room.username}`,
-                runtime: new Date().valueOf() - room.created_at,
-                live: room.live,
-            }));
-
-            const filteredRooms = rooms.filter(
-                (room) => room.username === viewer?.username
-            );
-
-            const newData = filteredRooms.length > 0 ? [...filteredRooms] : [];
-
-            while (newData.length < 8) {
-                let title = null;
-                let username = null;
-                let thumbnail = null;
-                let link = null;
-                let runtime = null;
-                let live = null;
-
-                newData.push({
-                    title,
-                    username,
-                    thumbnail,
-                    link,
-                    runtime,
-                    live,
-                });
-            }
-
-            setRecommendations(newData);
-        };
-
         fetchLiveRooms();
-    }, [id && viewer?.username]);
+    }, [id && profileUser?.username]);
 
     useEffect(() => {
         fetchUserData();
     }, [id]);
 
     useEffect(() => {
-        if (viewer) {
-            const followersList = removeId(viewer.followers);
-            const followingList = removeId(viewer.following);
-            setFollowers(followersList);
-            setFollowing(followingList);
-        }
-    }, [viewer]);
-
-    useEffect(() => {
-        if (currentUser && viewer) {
-            if (currentUser.username === viewer.username) {
+        if (authUser && profileUser) {
+            if (authUser.username === profileUser.username) {
                 setButtonState({ type: 'live', str: 'Live' });
-            } else if (currentUser.following?.includes(viewer.username)) {
+            } else if (authUser.following?.includes(profileUser.username)) {
                 setButtonState({ type: 'follow', str: 'Unfollow' });
             } else {
                 setButtonState({ type: 'notFollow', str: 'Follow' });
@@ -91,7 +39,7 @@ export default function Profile({ id }) {
         } else {
             setButtonState({ type: 'live', str: 'Live' });
         }
-    }, [currentUser]);
+    }, [authUser, profileUser]);
 
     const addArray = (array, value) => {
         if (!Array.isArray(array)) {
@@ -120,7 +68,7 @@ export default function Profile({ id }) {
         return array;
     };
 
-    const removeId = (list) => {
+    const arrayObjToArray = (list) => {
         if (!list || !Array.isArray(list)) {
             return [];
         }
@@ -135,48 +83,166 @@ export default function Profile({ id }) {
 
     const fetchUserData = async () => {
         try {
-            const r = await getUserData(id);
-            if (r.status === 'success') {
-                setViewer(r.user);
+            const [authResponse, profileResponse] = await Promise.all([
+                getUserData(),
+                id ? getUserData(id) : null,
+            ]);
+
+            if (authResponse?.status === 'success') {
+                const user = {
+                    ...authResponse.user,
+                    followers: arrayObjToArray(authResponse.user.followers),
+                };
+                setAuthUser(user);
             }
 
-            const user = await getUserData();
-            if (user.status === 'success') {
-                setCurrentUser(user.user);
+            if (profileResponse?.status === 'success') {
+                const profile = {
+                    ...profileResponse.user,
+                    followers: arrayObjToArray(profileResponse.user.followers),
+                };
+                setProfileUser(profile);
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
     };
 
-    const handleClick = async (type) => {
-        if (type === 'notFollow') {
-            setButtonState({ type: 'follow', str: 'Unfollow' });
-            await setUserData(currentUser.username, {
-                following: addArray(currentUser.following, viewer.username),
-            });
-            await setUserData(viewer.username, {
-                followers: addArray(viewer.followers, currentUser.username),
-            });
-            alert({
-                children: 'You have followed ' + viewer.username,
-                type: 'success',
-            });
-        } else if (type === 'follow') {
-            setButtonState({ type: 'notFollow', str: 'Follow' });
-            await setUserData(currentUser.username, {
-                following: removeArray(currentUser.following, viewer.username),
-            });
-            await setUserData(viewer.username, {
-                followers: removeArray(viewer.followers, currentUser.username),
-            });
-            alert({
-                children: 'You have unfollowed ' + viewer.username,
-                type: 'error',
+    const fetchLiveRooms = async () => {
+        if (!profileUser) return;
+
+        const data = await getLiveRooms();
+
+        if (data.status !== 'success') return;
+
+        let rooms = data.result.map((room) => ({
+            title: room.title,
+            username: room.username,
+            thumbnail: room.thumbnail,
+            link: `/watch/${room.username}`,
+            runtime: new Date().valueOf() - room.created_at,
+            live: room.live,
+        }));
+
+        const filteredRooms = rooms.filter(
+            (room) => room.username === profileUser?.username
+        );
+
+        const newData = filteredRooms.length > 0 ? [...filteredRooms] : [];
+
+        while (newData.length < 8) {
+            let title = null;
+            let username = null;
+            let thumbnail = null;
+            let link = null;
+            let runtime = null;
+            let live = null;
+
+            newData.push({
+                title,
+                username,
+                thumbnail,
+                link,
+                runtime,
+                live,
             });
         }
 
-        fetchUserData();
+        setRecommendations(newData);
+    };
+
+    useEffect(() => {
+        const syncFollowStatus = async () => {
+            if (!authUser || !profileUser) return;
+
+            const response = await getUserData(authUser.username);
+            if (response.status !== 'success') return;
+
+            const isFollowing = authUser.following?.includes(
+                profileUser.username
+            );
+            const shouldFollow = profileUser.followers?.includes(
+                authUser.username
+            );
+
+            if (authUser.following !== response.user.following) {
+                const res = await setUserData(authUser.username, {
+                    following: authUser.following,
+                });
+
+                if (res.status === 'success') {
+                    if (isFollowing && !shouldFollow) {
+                        await updateProfileFollowers('add');
+                    } else if (!isFollowing && shouldFollow) {
+                        await updateProfileFollowers('remove');
+                    }
+                }
+            }
+        };
+
+        const updateProfileFollowers = async (type) => {
+            if (!profileUser) return;
+
+            let updatedFollowers = [];
+            if (type === 'add') {
+                updatedFollowers = addArray(
+                    profileUser.followers,
+                    authUser.username
+                );
+            } else if (type === 'remove') {
+                updatedFollowers = removeArray(
+                    profileUser.followers,
+                    authUser.username
+                );
+            }
+
+            const followersResponse = await setUserData(profileUser.username, {
+                followers: updatedFollowers,
+            });
+
+            if (followersResponse.status === 'success') {
+                setProfileUser((prev) => ({
+                    ...prev,
+                    followers: arrayObjToArray(
+                        followersResponse.result.followers
+                    ),
+                }));
+            }
+        };
+
+        syncFollowStatus();
+    }, [authUser, profileUser]);
+
+    const handleClickBtn = (type) => {
+        if (type === 'notFollow') {
+            const updatedFollowing = addArray(
+                authUser.following,
+                profileUser.username
+            );
+            setAuthUser((prev) => ({
+                ...prev,
+                following: updatedFollowing,
+            }));
+
+            alert({
+                children: 'You have followed ' + profileUser.username,
+                type: 'success',
+            });
+        } else if (type === 'follow') {
+            const updatedFollowing = removeArray(
+                authUser.following,
+                profileUser.username
+            );
+            setAuthUser((prev) => ({
+                ...prev,
+                following: updatedFollowing,
+            }));
+
+            alert({
+                children: 'You have unfollowed ' + profileUser.username,
+                type: 'error',
+            });
+        }
     };
 
     return (
@@ -188,17 +254,17 @@ export default function Profile({ id }) {
                     <div className="w-full px-4 -translate-y-1/3">
                         <div className="flex flex-row items-center gap-4">
                             <div className="w-40">
-                                <Avatar src={viewer?.avatar} />
+                                <Avatar src={profileUser?.avatar} />
                             </div>
-                            <div className="flex justify-between w-full">
-                                <div className="text-4xl pt-8">
-                                    {viewer?.username}
+                            <div className="flex justify-between w-full pt-8 pr-8">
+                                <div className="text-4xl">
+                                    {profileUser?.username}
                                 </div>
                                 <div>
                                     <ActionButton
                                         str={buttonState.str}
                                         type={buttonState.type}
-                                        event={handleClick}
+                                        event={handleClickBtn}
                                     />
                                 </div>
                             </div>
@@ -206,7 +272,12 @@ export default function Profile({ id }) {
                     </div>
                 </div>
                 <div className="px-4 ">
-                    <Stat followers={followers} following={following} />
+                    <Stat
+                        followers={profileUser?.followers || []}
+                        following={profileUser?.following || []}
+                        authUser={authUser}
+                        setAuthUser={setAuthUser}
+                    />
                 </div>
                 <div>
                     <Gallery items={[...recommendations]} />

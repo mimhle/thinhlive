@@ -32,7 +32,7 @@ export default function Profile({ id }) {
             if (authUser.username === profileUser.username) {
                 setButtonState({ type: 'live', str: 'Live' });
             } else if (authUser.following?.includes(profileUser.username)) {
-                setButtonState({ type: 'follow', str: 'Unfollow' });
+                setButtonState({ type: 'follow', str: 'Following' });
             } else {
                 setButtonState({ type: 'notFollow', str: 'Follow' });
             }

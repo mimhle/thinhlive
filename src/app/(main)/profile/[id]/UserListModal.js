@@ -129,7 +129,7 @@ export default function UserListModal({
                                                 }
                                                 str={
                                                     isFollowing(data[index])
-                                                        ? 'Unfollow'
+                                                        ? 'Following'
                                                         : 'Follow'
                                                 }
                                                 event={() =>

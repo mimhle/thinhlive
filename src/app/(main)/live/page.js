@@ -18,7 +18,7 @@ import { useState } from "react";
 import { Room, RoomEvent } from "livekit-client";
 import { useEffect, useRef } from "react";
 
-export default function page() {
+export default function Page() {
     const [room, setRoom] = useState(null);
     const video = useRef(null);
     const parentElement = useRef(null);
@@ -112,7 +112,7 @@ export default function page() {
                     </label>
                     <div>
                         <h2 className="text-2xl font-bold">THINHK4</h2>
-                        <p className="text-1xl">let's play</p>
+                        <p className="text-1xl">let&apos;s play</p>
                     </div>
                 </div>
 

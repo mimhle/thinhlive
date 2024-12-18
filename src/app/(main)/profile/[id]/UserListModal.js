@@ -76,7 +76,7 @@ export default function UserListModal({
             onClick={onClose}
         >
             <div
-                className="bg-white w-[28rem] rounded-lg shadow-lg p-6 relative max-h-[90vh] overflow-y-auto"
+                className="bg-white w-[40rem] rounded-lg shadow-lg p-6 relative max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
             >
                 <button
@@ -94,14 +94,14 @@ export default function UserListModal({
                         (_, index) => (
                             <li
                                 key={index}
-                                className="flex items-center gap-6 justify-between py-5 px-5 hover:bg-gray-100 rounded-lg transition duration-300 shadow-sm hover:shadow-md"
+                                className="flex items-center gap-6 justify-between py-5 hover:bg-gray-100 rounded-lg transition duration-300 shadow-sm hover:shadow-md"
                                 onClick={() =>
                                     data[index] &&
                                     handleClick(href + data[index])
                                 }
                             >
                                 <div className="flex items-center gap-5">
-                                    <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-300">
+                                    <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-300 ml-5">
                                         {data[index] ? (
                                             <Avatar
                                                 src={avatars[data[index]]}

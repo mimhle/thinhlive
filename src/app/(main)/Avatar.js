@@ -34,14 +34,6 @@ export default function Avatar({ src }) {
                     objectFit="cover"
                     className="rounded-full"
                 />
-            ) : data?.avatar ? (
-                <Image
-                    src={data.avatar}
-                    alt="User avatar"
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-full"
-                />
             ) : (
                 <div className="avatar placeholder flex items-center justify-center w-full h-full">
                     <div className="bg-gradient-to-br from-primary to-secondary text-neutral-content rounded-full flex items-center justify-center w-full h-full">

@@ -20,10 +20,6 @@ export default function Profile({ id }) {
     const { contextHolder, alert } = useAlert();
 
     useEffect(() => {
-        fetchLiveRooms();
-    }, [id && profileUser?.username]);
-
-    useEffect(() => {
         fetchUserData();
     }, [id]);
 
@@ -102,53 +98,18 @@ export default function Profile({ id }) {
                     followers: arrayObjToArray(profileResponse.user.followers),
                 };
                 setProfileUser(profile);
+                setRecommendations(profile.lives.map((room) => ({
+                    title: room.title,
+                    username: room.username,
+                    thumbnail: room.thumbnail,
+                    link: room.live ? `/watch/${room.username}` : null,
+                    runtime: (room.endedAt || room.ended_at || new Date().valueOf()) - room.created_at,
+                    live: room.live,
+                })));
             }
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
-    };
-
-    const fetchLiveRooms = async () => {
-        if (!profileUser) return;
-
-        const data = await getLiveRooms();
-
-        if (data.status !== 'success') return;
-
-        let rooms = data.result.map((room) => ({
-            title: room.title,
-            username: room.username,
-            thumbnail: room.thumbnail,
-            link: `/watch/${room.username}`,
-            runtime: new Date().valueOf() - room.created_at,
-            live: room.live,
-        }));
-
-        const filteredRooms = rooms.filter(
-            (room) => room.username === profileUser?.username
-        );
-
-        const newData = filteredRooms.length > 0 ? [...filteredRooms] : [];
-
-        while (newData.length < 8) {
-            let title = null;
-            let username = null;
-            let thumbnail = null;
-            let link = null;
-            let runtime = null;
-            let live = null;
-
-            newData.push({
-                title,
-                username,
-                thumbnail,
-                link,
-                runtime,
-                live,
-            });
-        }
-
-        setRecommendations(newData);
     };
 
     useEffect(() => {

@@ -28,7 +28,7 @@ export async function DELETE(request) {
     }
 
     if (!await isLive(room)) return NextResponse.json({status: "error", message: "Room is not live."});
-    await setCurrentLiveData(room, {live: false, endedAt: new Date().valueOf()});
+    await setCurrentLiveData(room, {live: false, ended_at: new Date().valueOf()});
     await roomService.deleteRoom(room);
     return NextResponse.json({status: "success"});
 }

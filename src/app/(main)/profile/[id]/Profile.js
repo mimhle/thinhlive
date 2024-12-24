@@ -25,9 +25,7 @@ export default function Profile({ id }) {
 
     useEffect(() => {
         if (authUser && profileUser) {
-            if (authUser.username.startsWith('Anon_')) {
-                setButtonState({ type: 'notAllowed', str: 'Not Allowed' });
-            } else if (authUser.username === profileUser.username) {
+            if (authUser.username === profileUser.username) {
                 setButtonState({ type: 'live', str: 'Live' });
             } else if (authUser.following?.includes(profileUser.username)) {
                 setButtonState({ type: 'follow', str: 'Following' });
@@ -227,16 +225,7 @@ export default function Profile({ id }) {
                                 <ActionButton
                                         str={buttonState.str}
                                         type={buttonState.type}
-                                        event={(type) => {
-                                            if (authUser?.username.startsWith('Anon_')) {
-                                                alert({
-                                                    children: 'Anonymous users cannot perform this action.',
-                                                    type: 'error',
-                                                });
-                                                return;
-                                            }
-                                            handleClickBtn(type);
-                                        }}
+                                        event={handleClickBtn}
                                     />
                                 </div>
                             </div>

@@ -12,9 +12,8 @@ import {
     Cog8ToothIcon
 } from "@heroicons/react/24/solid";
 import {endLive, getLiveToken, getUserData, goLive, setLiveData, uploadMedia} from "/lib/frontend/api";
-import {useState} from "react";
 import {Room, RoomEvent} from "livekit-client";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {LiveKitRoom, useChat, useLocalParticipant, useRoomContext} from "@livekit/components-react";
 import {Chat} from "@/app/(main)/watch/[id]/Watch";
 
@@ -156,6 +155,10 @@ export default function Page() {
         setShowpopup(!showpopup);
         if (title === '') setTitle('No Title');
     };
+
+    useEffect(() => {
+        setLiveData(username.current, { title: title }).then(r => r);
+    }, [title]);
     return (
         <LiveKitRoom serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WEBSOCKET_URL} token={token} connect={!!token}>
         <div className="h-screen w-screen overflow-x-hidden">

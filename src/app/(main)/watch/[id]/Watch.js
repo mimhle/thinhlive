@@ -1,7 +1,6 @@
 "use client";
 import {
     ChatBubbleLeftEllipsisIcon,
-    Cog6ToothIcon,
     ArrowsPointingInIcon,
     ArrowsPointingOutIcon,
     HeartIcon,
@@ -203,18 +202,6 @@ export default function Watch() {
                         </div>
                         <div className=" w-full h-8 bottom-0 flex flex-row justify-between">
                             <div className="flex">
-                                <div className="h-6">
-                                    <div className="dropdown dropdown-top">
-                                        <Cog6ToothIcon className="h-6 mx-2" role="button" tabIndex={0}/>
-                                        <ul tabIndex={0}
-                                            className="dropdown-content menu bg-base-100 rounded-box z-[1] w-32 p-2 shadow">
-                                            <li><a>720p</a></li>
-                                            <li><a>480p</a></li>
-                                            <li><a>360p</a></li>
-                                            <li><a>240p</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
                                 {zoom ?
                                     <ArrowsPointingInIcon className="h-6 mx-2" role="button" onClick={handleZoom}/> :
                                     <ArrowsPointingOutIcon className="h-6 mx-2" role="button" onClick={handleZoom}/> }

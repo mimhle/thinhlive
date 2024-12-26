@@ -45,8 +45,7 @@ function Preview({ username }) {
         track,
     ) {
         const element = track.track.attach();
-        if (parentElement.current.hasChildNodes()) return;
-        parentElement.current?.appendChild(element);
+        parentElement.current?.replaceChildren(element);
         if (element.nodeName === "VIDEO") {
             video.current = element;
             setTimeout(() => {
@@ -74,8 +73,11 @@ function CameraButton() {
     const localParticipant = useLocalParticipant();
 
     const toggleCamera = () => {
-        setCamera(!camera);
-        localParticipant.localParticipant.setCameraEnabled(camera);
+        setCamera(() => !camera);
+        if (camera) localParticipant.localParticipant.setScreenShareEnabled(false).then(() => {
+            localParticipant.localParticipant.setCameraEnabled(camera);
+        });
+        else localParticipant.localParticipant.setCameraEnabled(camera);
     };
 
     return <div
@@ -113,8 +115,11 @@ function ScreenButton() {
     const localParticipant = useLocalParticipant();
 
     function toggleScreen() {
-        setScreen(!screen);
-        localParticipant.localParticipant.setScreenShareEnabled(screen);
+        setScreen(() => !screen);
+        if (screen) localParticipant.localParticipant.setCameraEnabled(false).then(() => {
+            localParticipant.localParticipant.setScreenShareEnabled(screen);
+        });
+        else localParticipant.localParticipant.setScreenShareEnabled(screen);
     }
 
     return <div
@@ -181,7 +186,7 @@ export default function Page() {
                             <div className="flex justify-between h-10">
                                 <p className="text-bold text-3xl ml-5">{title}</p>
                             </div>
-                            <div className="border-t border-gray-400 mt-1 flex justify-center">
+                            <div className="border-t border-gray-400 mt-1 flex justify-center relative">
                                 <div className="flex mt-4">
                                     <CameraButton/>
                                     <AudioButton/>

@@ -19,7 +19,7 @@ import {
     useChat, useRoomContext,
 } from "@livekit/components-react";
 import { RoomEvent, Track } from "livekit-client";
-import { secondsToHms } from "../../../../../lib/frontend/utils";
+import { secondsToHms } from "/lib/frontend/utils";
 
 
 function MediaRenderer() {

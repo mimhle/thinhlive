@@ -15,7 +15,8 @@ import {endLive, getLiveToken, getUserData, goLive, setLiveData, uploadMedia} fr
 import {useState} from "react";
 import {Room, RoomEvent} from "livekit-client";
 import {useEffect, useRef} from "react";
-import {LiveKitRoom, useLocalParticipant, useRoomContext} from "@livekit/components-react";
+import {LiveKitRoom, useChat, useLocalParticipant, useRoomContext} from "@livekit/components-react";
+import {Chat} from "@/app/(main)/watch/[id]/Watch";
 
 function Preview({ username }) {
     const localParticipant = useLocalParticipant();
@@ -206,13 +207,14 @@ export default function Page() {
                 </div>
                 <div className="flex bg-gray-500 w-1/4 h-full">
                     <div className="w-full ">
-                        <div className=" flex w-full shadow-lg border-b border-gray-300 pb-2 mb-4 ">
-                            <h2 className=" text-lg text-black p-2 ">Stream Chat</h2>
-                            <ChatBubbleLeftEllipsisIcon className="size-8 mt-2 text-black"/>
-                        </div>
-                        <div className="flex flex-col h-80 overflow-y-auto mb-4">
+                        {/*<div className=" flex w-full shadow-lg border-b border-gray-300 pb-2 mb-4 ">*/}
+                        {/*    <h2 className=" text-lg text-black p-2 ">Stream Chat</h2>*/}
+                        {/*    <ChatBubbleLeftEllipsisIcon className="size-8 mt-2 text-black"/>*/}
+                        {/*</div>*/}
+                        {/*<div className="flex flex-col h-80 overflow-y-auto mb-4">*/}
 
-                        </div>
+                        {/*</div>*/}
+                        <Chat></Chat>
                     </div>
                 </div>
             </div>

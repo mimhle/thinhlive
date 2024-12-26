@@ -33,7 +33,7 @@ function MediaRenderer() {
     })];
 }
 
-function Chat({placeholder = "", anon = false}) {
+export function Chat({placeholder = "", anon = false}) {
     const { send, chatMessages } = useChat();
     const messageBox = useRef(null);
     const room = useRoomContext();
@@ -65,7 +65,7 @@ function Chat({placeholder = "", anon = false}) {
             {chatMessages.map((msg, i) => {
                 return <div className="w-full p-2" key={i}>
                     <div className="flex gap-2">
-                        <span className="text-white font-bold">{msg.from.identity}:</span>
+                        <a className="text-white font-bold" href={`/profile/${msg.from.identity}`}>{msg.from.identity}:</a>
                         <span className="text-white">{msg.message}</span>
                     </div>
                 </div>;

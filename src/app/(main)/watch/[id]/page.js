@@ -1,4 +1,4 @@
-import Watch from "./Watch";
+import {Watch} from "./Watch";
 import { getLives } from "/lib/backend/live";
 import { redirect } from "next/navigation";
 

@@ -71,21 +71,32 @@ function Preview({ username }) {
 function CameraButton() {
     const [camera, setCamera] = useState(false);
     const localParticipant = useLocalParticipant();
-
+    const [bgCamera, setBgCamera] = useState(false);
     const toggleCamera = () => {
-        setCamera(() => !camera);
+        setBgCamera(!bgCamera);
+        setCamera((prev) => !prev);
+    };
+
+    useEffect(() => {
         if (camera) localParticipant.localParticipant.setScreenShareEnabled(false).then(() => {
             localParticipant.localParticipant.setCameraEnabled(camera);
         });
         else localParticipant.localParticipant.setCameraEnabled(camera);
-    };
+    }, [camera]);
 
     return <div
-        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center">
-        {camera ? (
-            <VideoCameraIcon className="size-6" onClick={toggleCamera}/>
-        ) : (<VideoCameraSlashIcon className="size-6" onClick={toggleCamera}/>
-        )}
+        className="flex ml-4 mr-4 w-12 h-12 rounded-full justify-center items-center">
+        {bgCamera && camera ? (
+            <div className="flex  w-full h-full rounded-full bg-white border-red-500 justify-center items-center">
+            <VideoCameraIcon className="size-6 text-black" onClick={toggleCamera}/>
+            </div>
+        ) : (
+        <div className="flex  w-full h-full rounded-full bg-zinc-900 hover:bg-black border-red-500 justify-center items-center">
+        <VideoCameraSlashIcon className="size-6" onClick={toggleCamera}/>
+        </div>
+        )
+        
+    }
     </div>;
 }
 
@@ -99,13 +110,17 @@ function AudioButton() {
     };
 
     return <div
-        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center"
         role="button" onClick={toggleVolume}>
 
         {volume ? (
-                <SpeakerWaveIcon className="size-6"/>)
+            <div className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-white justify-center items-center">
+                <SpeakerWaveIcon className="size-6 text-black"/>
+            </div>)
             :
-            (<SpeakerXMarkIcon className="size-6"/>)
+            (<div className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-zinc-900 hover:bg-black justify-center items-center">
+                <SpeakerXMarkIcon className="size-6"/>
+            </div>
+            )
         }
     </div>;
 }
@@ -115,18 +130,31 @@ function ScreenButton() {
     const localParticipant = useLocalParticipant();
 
     function toggleScreen() {
-        setScreen(() => !screen);
+        setScreen((prev) => !prev);
+    }
+
+    useEffect(() => {
         if (screen) localParticipant.localParticipant.setCameraEnabled(false).then(() => {
             localParticipant.localParticipant.setScreenShareEnabled(screen);
         });
         else localParticipant.localParticipant.setScreenShareEnabled(screen);
-    }
+    }, [screen]);
 
     return <div
-        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center"
+        
         role="button" onClick={toggleScreen}>
         {
-            screen ? <TvIcon className="size-6"/> : null
+            !screen ? (
+            <div className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-zinc-900 hover:bg-black justify-center items-center">
+            <TvIcon className="size-6 text-white"/>
+            </div>
+            )
+             : (
+             <div className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-white justify-center items-center">
+                <TvIcon className="size-6 text-black"/>
+             </div>
+             )
+            
         }
     </div>;
 }
@@ -162,11 +190,11 @@ export default function Page() {
     };
 
     useEffect(() => {
-        setLiveData(username.current, { title: title }).then(r => r);
+        setLiveData(username.current, { title: title }).then(r => r).catch(console.log);
     }, [title]);
     return (
-        <LiveKitRoom serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WEBSOCKET_URL} token={token} connect={!!token}>
-        <div className="h-screen w-screen overflow-x-hidden">
+        <LiveKitRoom serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WEBSOCKET_URL} token={token} connect={!!token} className="w-full">
+        <div className="h-screen w-full overflow-x-hidden">
             {/*<div className="header flex pt-3 h-19 bg-gray-900">*/}
             {/*    <div className="flex ml-5">*/}
             {/*        <label className="swap text-5xl mb-3 mr-2">*/}
@@ -179,7 +207,7 @@ export default function Page() {
             {/*    </div>*/}
             {/*</div>*/}
             <div className="flex flex-row h-full w-full">
-                <div className="bg-gray-400 w-3/4 h-full flex flex-col">
+                <div className="bg-gray-400 overflow-hidden w-full h-full flex flex-col">
                     <Preview username={username}/>
                     <div className="h-full bg-stone-950">
                         <div className="bg-gray-800 h-full w-full rounded-[7px] ">
@@ -187,11 +215,20 @@ export default function Page() {
                                 <p className="text-bold text-3xl ml-5">{title}</p>
                             </div>
                             <div className="border-t border-gray-400 mt-1 flex justify-center relative">
-                                <div className="flex mt-4">
+                                <div className="flex mt-4 ">
+                                    <div className=" hover:scale-110 transition duration-200 ">
                                     <CameraButton/>
+                                    </div>
+                                    <div className="hover:scale-110 transition duration-200">
                                     <AudioButton/>
+                                    </div>
+                                    
+                                
+                                    <div className="flex ml-4 mr-4 w-12 h-12 rounded-full justify-center items-center hover:scale-110 transition duration-200">
+                                        <ScreenButton/>
+                                    </div>
                                     <div
-                                        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center"
+                                        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center hover:scale-110 transition duration-200"
                                         role="button"
                                         onClick={() => {
                                             endLive(username.current).then(r => {
@@ -199,12 +236,14 @@ export default function Page() {
                                                 window.location.href = "/";
                                             });
                                         }}>
-                                        <PhoneXMarkIcon className="size-6"/>
+                                        <div className="flex w-full h-full hover:bg-red-700 rounded-full justify-center items-center hover:scale-110 transition duration-200">
+                                        <PhoneXMarkIcon className="size-6 "/>
+                                        </div>
+                                        
 
                                     </div>
-                                    <ScreenButton/>
                                     <div
-                                        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center"
+                                        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-zinc-900 hover:bg-black justify-center items-center hover:scale-110 transition duration-200"
                                         role="button" onClick={togglePopup}>
                                         <Cog8ToothIcon className="size-6"/>
                                     </div>
@@ -213,15 +252,8 @@ export default function Page() {
                         </div>
                     </div>
                 </div>
-                <div className="flex bg-gray-500 w-1/4 h-full">
-                    <div className="w-full ">
-                        {/*<div className=" flex w-full shadow-lg border-b border-gray-300 pb-2 mb-4 ">*/}
-                        {/*    <h2 className=" text-lg text-black p-2 ">Stream Chat</h2>*/}
-                        {/*    <ChatBubbleLeftEllipsisIcon className="size-8 mt-2 text-black"/>*/}
-                        {/*</div>*/}
-                        {/*<div className="flex flex-col h-80 overflow-y-auto mb-4">*/}
-
-                        {/*</div>*/}
+                <div className="flex bg-gray-500 w-1/3 h-full">
+                    <div className="w-full">
                         <Chat></Chat>
                     </div>
                 </div>

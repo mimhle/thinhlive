@@ -56,7 +56,7 @@ export default function Page() {
                 <Password placeholder="Password" className="input input-bordered" value={password} onChange={e => setPassword(e.target.value)} />
                 <Button className="btn btn-primary" onClick={submit}>Sign in</Button>
                 <div className="flex flex-row flex-wrap justify-between gap-1">
-                    <Link className="link" href="#">Forgot password?</Link>
+                    <Link className="link" href="#"></Link>
                     <Link className="link" href={"/signup"}>Don&apos;t have an account?</Link>
                 </div>
                 <div className="divider">OR</div>

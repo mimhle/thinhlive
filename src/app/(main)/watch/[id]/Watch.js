@@ -3,14 +3,12 @@ import {
     ChatBubbleLeftEllipsisIcon,
     ArrowsPointingInIcon,
     ArrowsPointingOutIcon,
-    HeartIcon,
     EyeIcon,
-    ClockIcon
+    ClockIcon,
 } from "@heroicons/react/24/outline";
-import {HeartIcon as HeartFilled} from "@heroicons/react/24/solid";
 import {useEffect, useRef, useState} from "react";
-import { getLiveRoom, getLiveToken, getUserData } from "/lib/frontend/api";
-import { useParams } from "next/navigation";
+import {getLiveRoom, getLiveToken, getUserData} from "/lib/frontend/api";
+import {useParams} from "next/navigation";
 import {
     AudioTrack,
     LiveKitRoom,
@@ -18,8 +16,9 @@ import {
     VideoTrack,
     useChat, useRoomContext,
 } from "@livekit/components-react";
-import { RoomEvent, Track } from "livekit-client";
-import { secondsToHms } from "/lib/frontend/utils";
+import {RoomEvent, Track} from "livekit-client";
+import {secondsToHms} from "/lib/frontend/utils";
+import Avatar from "@/app/(main)/Avatar";
 
 
 function MediaRenderer() {
@@ -27,13 +26,13 @@ function MediaRenderer() {
     const audioTracks = useTracks([Track.Source.Microphone, Track.Source.ScreenShareAudio]);
 
     return [...tracks.map((track, i) => {
-        return <VideoTrack className="w-full h-full object-fill" trackRef={track} key={i} />;
+        return <VideoTrack className="w-full h-full object-fill" trackRef={track} key={i}/>;
     }), ...audioTracks.map((track, i) => {
-        return <AudioTrack trackRef={track} key={-i} />;
+        return <AudioTrack trackRef={track} key={-i}/>;
     })];
 }
 
-export function Chat({placeholder = "", anon = false}) {
+export function Chat({ placeholder = "", anon = false }) {
     const { send, chatMessages } = useChat();
     const messageBox = useRef(null);
     const room = useRoomContext();
@@ -55,7 +54,7 @@ export function Chat({placeholder = "", anon = false}) {
             e.target.value = '';
             messageBox.current?.lastElementChild?.scrollIntoView?.({ behavior: 'smooth', block: 'end' });
         }
-    }
+    };
 
     return <>
         <div className="flex w-full h-10 justify-between items-center bg-white/20 p-4 rounded-t-lg">
@@ -65,7 +64,8 @@ export function Chat({placeholder = "", anon = false}) {
             {chatMessages.map((msg, i) => {
                 return <div className="w-full p-2" key={i}>
                     <div className="flex gap-2">
-                        <a className="text-white font-bold" href={`/profile/${msg.from.identity}`}>{msg.from.identity}:</a>
+                        <a className="text-white font-bold"
+                           href={`/profile/${msg.from.identity}`}>{msg.from.identity}:</a>
                         <span className="text-white">{msg.message}</span>
                     </div>
                 </div>;
@@ -74,7 +74,8 @@ export function Chat({placeholder = "", anon = false}) {
         <div className="w-full">
             <label className="input input-bordered flex items-center gap-2">
                 <ChatBubbleLeftEllipsisIcon className="h-5"/>
-                <input type="text" className="grow" placeholder={placeholder ? placeholder : "Type a message..."} onKeyDown={onKeyPressHandler} disabled={disabled || anon}/>
+                <input type="text" className="grow" placeholder={placeholder ? placeholder : "Type a message..."}
+                       onKeyDown={onKeyPressHandler} disabled={disabled || anon}/>
             </label>
         </div>
     </>;
@@ -116,7 +117,7 @@ function LiveLength() {
         room.on(RoomEvent.Connected, () => {
             const startTime = new Date(Number(room.roomInfo.creationTime)).valueOf();
             setInterval(() => {
-                setTime(Math.round((new Date().valueOf()/1000) - startTime));
+                setTime(Math.round((new Date().valueOf() / 1000) - startTime));
             }, 1000);
         });
         loaded.current = true;
@@ -130,7 +131,6 @@ function LiveLength() {
 
 export default function Watch() {
 
-    const [like, setLike] = useState(false);
     const [zoom, setZoom] = useState(false);
     const videoRef = useRef(null);
     const params = useParams();
@@ -138,10 +138,8 @@ export default function Watch() {
     const [token, setToken] = useState("");
     const [anon, setAnon] = useState(false);
     const [title, setTitle] = useState("Title");
+    const [avatar, setAvatar] = useState();
 
-    const handleLike = () => {
-        setLike(!like);
-    };
 
     const handleZoom = () => {
         if (!zoom) {
@@ -176,6 +174,12 @@ export default function Watch() {
         };
     }, []);
 
+    useEffect(() => {
+        getUserData(id).then(data => {
+            setAvatar(data.user.avatar);
+        });
+    }, []);
+
     return <LiveKitRoom
         token={token}
         serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_WEBSOCKET_URL}
@@ -200,21 +204,29 @@ export default function Watch() {
                                 LIVE
                             </div>
                         </div>
-                        <div className=" w-full h-8 bottom-0 flex flex-row justify-between">
+                        <div className=" w-full h-8 bottom-0">
                             <div className="flex">
                                 {zoom ?
                                     <ArrowsPointingInIcon className="h-6 mx-2" role="button" onClick={handleZoom}/> :
-                                    <ArrowsPointingOutIcon className="h-6 mx-2" role="button" onClick={handleZoom}/> }
-                            </div>
-                            <div>
-                                {like ? <HeartFilled className="h-6 mx-2 text-red-500" role="button" onClick={handleLike}/> :
-                                    <HeartIcon className="h-6 mx-2" role="button" onClick={handleLike}/>}
+                                    <ArrowsPointingOutIcon className="h-6 mx-2" role="button" onClick={handleZoom}/>}
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="bg-white/10 text-2xl flex p-4 rounded-xl h-1/5">
-                    {title}
+                <div className="bg-white/10 text-2xl flex flex-col p-4 rounded-xl h-1/5 gap-4">
+                    <div className="font-extrabold flex gap-4">
+                        <div className="w-10">
+                            <Avatar src={avatar}/>
+                        </div>
+                        <div className="flex">
+                            <a className="mt-2 flex" href={`/profile/${id}`}>
+                                {id}
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        {title}
+                    </div>
                 </div>
             </div>
             <div className="w-1/3 h-full translate-x-2">

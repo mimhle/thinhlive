@@ -71,8 +71,9 @@ function Preview({ username }) {
 function CameraButton() {
     const [camera, setCamera] = useState(false);
     const localParticipant = useLocalParticipant();
-
+    const [bgCamera, setBgCamera] = useState(false);
     const toggleCamera = () => {
+        setBgCamera(!bgCamera);
         setCamera(() => !camera);
         if (camera) localParticipant.localParticipant.setScreenShareEnabled(false).then(() => {
             localParticipant.localParticipant.setCameraEnabled(camera);
@@ -81,11 +82,18 @@ function CameraButton() {
     };
 
     return <div
-        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center">
-        {camera ? (
-            <VideoCameraIcon className="size-6" onClick={toggleCamera}/>
-        ) : (<VideoCameraSlashIcon className="size-6" onClick={toggleCamera}/>
-        )}
+        className="flex ml-4 mr-4 w-12 h-12 rounded-full justify-center items-center">
+        {bgCamera && camera ? (
+            <div className="flex  w-full h-full rounded-full bg-white border-red-500 justify-center items-center">
+            <VideoCameraIcon className="size-6 text-black" onClick={toggleCamera}/>
+            </div>
+        ) : (
+        <div className="flex  w-full h-full rounded-full bg-zinc-900 hover:bg-black border-red-500 justify-center items-center">
+        <VideoCameraSlashIcon className="size-6" onClick={toggleCamera}/>
+        </div>
+        )
+        
+    }
     </div>;
 }
 
@@ -99,13 +107,17 @@ function AudioButton() {
     };
 
     return <div
-        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center"
         role="button" onClick={toggleVolume}>
 
         {volume ? (
-                <SpeakerWaveIcon className="size-6"/>)
+            <div className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-white justify-center items-center">
+                <SpeakerWaveIcon className="size-6 text-black"/>
+            </div>)
             :
-            (<SpeakerXMarkIcon className="size-6"/>)
+            (<div className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-zinc-900 hover:bg-black justify-center items-center">
+                <SpeakerXMarkIcon className="size-6"/>
+            </div>
+            )
         }
     </div>;
 }
@@ -123,10 +135,20 @@ function ScreenButton() {
     }
 
     return <div
-        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center"
+        
         role="button" onClick={toggleScreen}>
         {
-            screen ? <TvIcon className="size-6"/> : null
+            screen ? (
+            <div className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-zinc-900 hover:bg-black justify-center items-center">
+            <TvIcon className="size-6 text-white"/>
+            </div>
+            )
+             : (
+             <div className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-white justify-center items-center">
+                <TvIcon className="size-6 text-black"/>
+             </div>
+             )
+            
         }
     </div>;
 }
@@ -187,11 +209,20 @@ export default function Page() {
                                 <p className="text-bold text-3xl ml-5">{title}</p>
                             </div>
                             <div className="border-t border-gray-400 mt-1 flex justify-center relative">
-                                <div className="flex mt-4">
+                                <div className="flex mt-4 ">
+                                    <div className=" hover:scale-110 transition duration-200 ">
                                     <CameraButton/>
+                                    </div>
+                                    <div className="hover:scale-110 transition duration-200">
                                     <AudioButton/>
+                                    </div>
+                                    
+                                
+                                    <div className="flex ml-4 mr-4 w-12 h-12 rounded-full justify-center items-center hover:scale-110 transition duration-200">
+                                        <ScreenButton/>
+                                    </div>
                                     <div
-                                        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center"
+                                        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center hover:scale-110 transition duration-200"
                                         role="button"
                                         onClick={() => {
                                             endLive(username.current).then(r => {
@@ -199,12 +230,14 @@ export default function Page() {
                                                 window.location.href = "/";
                                             });
                                         }}>
-                                        <PhoneXMarkIcon className="size-6"/>
+                                        <div className="flex w-full h-full hover:bg-red-700 rounded-full justify-center items-center hover:scale-110 transition duration-200">
+                                        <PhoneXMarkIcon className="size-6 "/>
+                                        </div>
+                                        
 
                                     </div>
-                                    <ScreenButton/>
                                     <div
-                                        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-red-500 justify-center items-center"
+                                        className="flex ml-4 mr-4 w-12 h-12 rounded-full bg-zinc-900 hover:bg-black justify-center items-center hover:scale-110 transition duration-200"
                                         role="button" onClick={togglePopup}>
                                         <Cog8ToothIcon className="size-6"/>
                                     </div>

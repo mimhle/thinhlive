@@ -22,7 +22,9 @@ export default function Nav({ userName }) {
             <div className="flex flex-col gap-4">
                 <div className="avatar placeholder">
                     <div className="bg-gradient-to-br from-primary to-secondary text-neutral-content w-full rounded-full">
-                        <span className="text-xl">LOGO</span>
+                        <span className="text-xl">
+                            <img url="ssss" src="https://png.pngtree.com/png-clipart/20201208/original/pngtree-dark-green-twitch-live-streaming-pop-up-png-image_5554948.jpg"/>
+                        </span>
                     </div>
                 </div>
                 <Avatar src={avatar} />

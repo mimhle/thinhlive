@@ -154,7 +154,7 @@ export default function Setting() {
                     </div>
                     <div className="flex flex-row gap-8 items-center w-full h-fit">
                         <div className="w-48 relative">
-                            <Avatar src={avatarPreview || undefined}/>
+                            <Avatar src={avatarPreview || data.avatar}/>
                             {isUpdatingAvatar && (
                                 <div
                                     className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-full">

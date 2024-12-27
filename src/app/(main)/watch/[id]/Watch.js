@@ -81,7 +81,7 @@ export function Chat({ placeholder = "", anon = false }) {
     </>;
 }
 
-function ViewerCount() {
+export function ViewerCount() {
     const room = useRoomContext();
     const [viewer, setViewer] = useState(0);
     let loaded = useRef(false);
@@ -107,7 +107,7 @@ function ViewerCount() {
     </div>;
 }
 
-function LiveLength() {
+export function LiveLength() {
     const room = useRoomContext();
     const [time, setTime] = useState(null);
     let loaded = useRef(false);
@@ -129,7 +129,7 @@ function LiveLength() {
     </div>;
 }
 
-export default function Watch() {
+export function Watch() {
 
     const [zoom, setZoom] = useState(false);
     const videoRef = useRef(null);

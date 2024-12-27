@@ -18,7 +18,7 @@ export default function Nav({ userName }) {
     }, []);
 
     return (
-        <div className="bg-base-100 p-2 flex flex-col gap-4 justify-between ~/md:~w-12/20 max-h-screen">
+        <div className="bg-base-100 p-2 flex flex-col gap-4 justify-between w-20 max-h-screen">
             <div className="flex flex-col gap-4">
                 <div className="avatar placeholder">
                     <div className="bg-gradient-to-br from-primary to-secondary text-neutral-content w-full rounded-full">

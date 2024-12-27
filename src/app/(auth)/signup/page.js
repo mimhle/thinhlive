@@ -40,7 +40,7 @@ export default function Page() {
 
     return <div className="h-full flex flex-col justify-center min-h-screen w-screen">
         {contextHolder}
-        <div className="card bg-base-200 ~w-[20rem]/[30rem] m-auto">
+        <div className="card bg-base-200 w-[30rem] m-auto">
             <div className="card-body">
                 <h1 className="text-2xl font-bold">Sign up</h1>
                 <input placeholder="Username" className="input input-bordered" value={username}

@@ -3,11 +3,9 @@ import {
     ChatBubbleLeftEllipsisIcon,
     ArrowsPointingInIcon,
     ArrowsPointingOutIcon,
-    HeartIcon,
     EyeIcon,
-    ClockIcon
+    ClockIcon,
 } from "@heroicons/react/24/outline";
-import {HeartIcon as HeartFilled} from "@heroicons/react/24/solid";
 import {useEffect, useRef, useState} from "react";
 import {getLiveRoom, getLiveToken, getUserData} from "/lib/frontend/api";
 import {useParams} from "next/navigation";
@@ -140,7 +138,7 @@ export default function Watch() {
     const [token, setToken] = useState("");
     const [anon, setAnon] = useState(false);
     const [title, setTitle] = useState("Title");
-    const [userLive, setUserLive] = useState("User");
+    const [avatar, setAvatar] = useState();
 
 
     const handleZoom = () => {
@@ -168,13 +166,18 @@ export default function Watch() {
             getLiveRoom(id).then(data => {
                 if (data.status !== "success") return;
                 setTitle(data.result.title);
-                setUserLive(data.result.username);
             });
         });
 
         return () => {
             document.removeEventListener("fullscreenchange", handleFullscreenChange);
         };
+    }, []);
+
+    useEffect(() => {
+        getUserData(id).then(data => {
+            setAvatar(data.user.avatar);
+        });
     }, []);
 
     return <LiveKitRoom
@@ -213,11 +216,13 @@ export default function Watch() {
                 <div className="bg-white/10 text-2xl flex flex-col p-4 rounded-xl h-1/5 gap-4">
                     <div className="font-extrabold flex gap-4">
                         <div className="w-10">
-                            <Avatar/>
+                            <Avatar src={avatar}/>
                         </div>
-                        <a className="mt-2" href={`/profile/${userLive}`}>
-                            {userLive}
-                        </a>
+                        <div className="flex">
+                            <a className="mt-2 flex" href={`/profile/${id}`}>
+                                {id}
+                            </a>
+                        </div>
                     </div>
                     <div>
                         {title}
